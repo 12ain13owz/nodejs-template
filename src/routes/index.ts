@@ -9,7 +9,7 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 router.get("/error", (req: Request, res: Response, next: NextFunction) => {
   try {
     res.locals.func = "Test Function Error";
-    throw Object.assign(new Error("User already exists!"), { status: 400 });
+    throw Object.assign(new Error("Test message error"), { status: 400 });
   } catch (error) {
     next(error);
   }

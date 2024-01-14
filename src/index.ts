@@ -5,10 +5,9 @@ import router from "./routes";
 import handlerError from "./middlewares/handler-error.middleware";
 
 const app = express();
-const port = 7000;
+const port = process.env.PORT || 3500;
 
 app.use(morgan("dev"));
-app.use(express.json());
 
 app.use(router);
 app.use(handlerError);
