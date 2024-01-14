@@ -13,5 +13,5 @@ app.use(router);
 app.use(handlerError);
 
 app.listen(port, () => {
-  log.info(`Listening on port ${port}`);
+  log.info(`Server listening on port ${port}`);
 });
