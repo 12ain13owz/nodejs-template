@@ -5,7 +5,7 @@ interface ResponseError extends Error {
   status?: number;
 }
 
-const handlerError = async (
+const errorHandler = async (
   error: ResponseError,
   req: Request,
   res: Response,
@@ -14,13 +14,14 @@ const handlerError = async (
   try {
     const message = error.message || "Internal Server Error!";
     const status = error.status || 500;
-    const func = res.locals.func;
+    const func = res.locals.func || "Not found function";
+    const url = req.method + req.baseUrl + req.url;
 
-    log.error(`${func}: ${message}`);
+    log.error(`${url}, ${func}: ${message}`);
     res.status(status).json({ message });
   } catch (error) {
-    res.sendStatus(500);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export default handlerError;
+export default errorHandler;
