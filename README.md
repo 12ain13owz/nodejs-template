@@ -3,7 +3,7 @@
 ## Install Dev Dependencies
 
 ```
-npm i -D @types/config @types/express @types/lodash @types/morgan @types/node pino-pretty tsx typescript
+npm i -D @types/config @types/express @types/lodash @types/morgan @types/node pino-pretty ts-node tsx typescript
 ```
 
 ## Install Dependencies
