@@ -5,30 +5,30 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/src/index.js",
-    "dev": "tsx watch --clear-screen=false src/index",
+    "dev": "tsx watch --env-file=.env src/index",
     "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/config": "^3.3.3",
+    "@types/config": "^3.3.4",
     "@types/express": "^4.17.21",
-    "@types/lodash": "^4.14.202",
+    "@types/lodash": "^4.17.7",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.11.20",
-    "pino-pretty": "^10.3.1",
+    "@types/node": "^20.14.12",
+    "pino-pretty": "^11.2.1",
     "ts-node": "^10.9.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
-    "config": "^3.3.11",
-    "dayjs": "^1.11.10",
+    "config": "^3.3.12",
+    "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
-    "express": "^4.18.2",
+    "express": "^4.19.2",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
-    "pino": "^8.19.0"
+    "pino": "^9.3.1"
   }
 }

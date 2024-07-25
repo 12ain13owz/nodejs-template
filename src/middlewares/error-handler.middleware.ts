@@ -13,13 +13,16 @@ const errorHandler = async (
 ) => {
   try {
     const message = error.message || "Internal Server Error!";
-    const status = error.status || 500;
+    const status = error.status ?? 500;
     const func = res.locals.func || "Not found function";
-    const url = req.method + req.baseUrl + req.url;
+    const method = req.method;
+    const url = req.baseUrl + req.url;
 
-    log.error(`${url}, ${func}: ${message}`);
+    log.error(`${method}: ${url} > ${func}: ${message}`);
     res.status(status).json({ message });
   } catch (error) {
+    console.log(1);
+    console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };

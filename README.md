@@ -1,4 +1,4 @@
-# Nodejs Express Typescript
+# NodeJS witt Express + Typescript
 
 ## Install Dev Dependencies
 
@@ -12,7 +12,7 @@ npm i -D @types/config @types/express @types/lodash @types/morgan @types/node pi
 npm i config dayjs dotenv express lodash morgan pino
 ```
 
-- create .env file
+## Create .env file
 
 ```
 PORT="<PORT>"
@@ -28,7 +28,7 @@ npm run dev
 
 ### Options
 
-- generate keys `(Key Size: 2048 bit)`: https://travistidwell.com/jsencrypt/demo/
+- Generate keys `(Key Size: 2048 bit)`: https://travistidwell.com/jsencrypt/demo/
 
 ```
 ACCESS_TOKEN_PRIVATE_KEY="<Private Key>"
