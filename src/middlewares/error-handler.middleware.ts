@@ -21,7 +21,6 @@ const errorHandler = async (
     log.error(`${method}: ${url} > ${func}: ${message}`);
     res.status(status).json({ message });
   } catch (error) {
-    console.log(1);
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
