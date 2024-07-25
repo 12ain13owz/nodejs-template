@@ -5,7 +5,11 @@ import { AppRes } from "../types/express";
 const router = Router();
 
 router.get("/", (req: Request, res: AppRes, next: NextFunction) => {
-  res.json({ meeeage: " ok" });
+  try {
+    res.json({ meeeage: " ok" });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/error", (req: Request, res: AppRes, next: NextFunction) => {
