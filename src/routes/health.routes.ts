@@ -1,13 +1,14 @@
-import { NextFunction, Request, Response, Router } from "express";
+import { NextFunction, Request, Router } from "express";
 import { newError } from "../utils/helper";
+import { AppRes } from "../types/express";
 
 const router = Router();
 
-router.get("/", (req: Request, res: Response, next: NextFunction) => {
+router.get("/", (req: Request, res: AppRes, next: NextFunction) => {
   res.json({ meeeage: " ok" });
 });
 
-router.get("/error", (req: Request, res: Response, next: NextFunction) => {
+router.get("/error", (req: Request, res: AppRes, next: NextFunction) => {
   res.locals.func = "Routes > Health > Error";
 
   try {
