@@ -1,6 +1,6 @@
 import { NextFunction, Request, Router } from "express";
-import { newError } from "../utils/helper";
 import { AppRes } from "../types/express";
+import { appError } from "../middlewares/app-error.middleware";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.get("/error", (req: Request, res: AppRes, next: NextFunction) => {
   res.locals.func = "Routes > Health > Error";
 
   try {
-    throw newError(400, "Test message error!");
+    throw appError(400, "Test message error!");
   } catch (error) {
     next(error);
   }

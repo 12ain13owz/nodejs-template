@@ -5,7 +5,7 @@ interface ResponseError extends Error {
   status?: number;
 }
 
-const handleError = async (
+const appErrorHandler = async (
   error: ResponseError,
   req: Request,
   res: Response,
@@ -26,4 +26,8 @@ const handleError = async (
   }
 };
 
-export default handleError;
+export default appErrorHandler;
+
+export function appError(status: number, message: string) {
+  return Object.assign(new Error(message), { status });
+}

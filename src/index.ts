@@ -5,7 +5,7 @@ import morgan from "morgan";
 
 import log from "./utils/logger";
 import routes from "./routes";
-import handleError from "./middlewares/error.middleware";
+import appErrorHandler from "./middlewares/app-error.middleware";
 
 const app = express();
 const port = config.get<number>("port");
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(routes);
-app.use(handleError);
+app.use(appErrorHandler);
 
 const main = () => {
   try {
