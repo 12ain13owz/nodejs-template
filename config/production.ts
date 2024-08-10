@@ -1,6 +1,6 @@
 import { AppConfig } from "./type";
 
-export const developmentConfig: AppConfig = {
+export const productionConfig: AppConfig = {
   port: Number(process.env.PORT),
 };
 

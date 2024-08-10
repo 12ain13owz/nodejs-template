@@ -1,5 +1,5 @@
 require("dotenv").config();
-import config from "config";
+import { config } from "../config";
 import express from "express";
 import morgan from "morgan";
 
@@ -8,7 +8,7 @@ import routes from "./routes";
 import appErrorHandler from "./middlewares/app-error.middleware";
 
 const app = express();
-const port = config.get<number>("port");
+const port = config.get("port");
 
 app.use(morgan("dev"));
 app.use(express.json());
