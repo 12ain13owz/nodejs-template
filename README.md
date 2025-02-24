@@ -15,7 +15,8 @@ npm i config dayjs dotenv express lodash morgan pino
 ## Create .env file
 
 ```
-PORT="<PORT>"
+PORT=<PORT>
+NODE_ENV=<NODE_ENV>
 ```
 
 ## Run

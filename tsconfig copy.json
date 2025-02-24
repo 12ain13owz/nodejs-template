@@ -29,9 +29,9 @@
     "checkJs": true, // ตรวจสอบ type ใน JavaScript files
 
     // Emit Settings
-    "declaration": false, // สร้างไฟล์ .d.ts
-    "sourceMap": false, // สร้าง source maps สำหรับ debugging
-    "removeComments": false, // เก็บ comments ไว้ในไฟล์ที่ compile แล้ว
+    "declaration": true, // สร้างไฟล์ .d.ts
+    "sourceMap": true, // สร้าง source maps สำหรับ debugging
+    "removeComments": true, // เก็บ comments ไว้ในไฟล์ที่ compile แล้ว
 
     // Advanced Settings
     "forceConsistentCasingInFileNames": true, // ตรวจสอบความถูกต้องของชื่อไฟล์

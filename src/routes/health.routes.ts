@@ -1,10 +1,9 @@
-import { NextFunction, Request, Router } from "express";
-import { AppRes } from "../types/express";
-import { appError } from "../middlewares/app-error.middleware";
+import { NextFunction, Request, Response, Router } from "express";
+import { AppError } from "../utils/errors";
 
 const router = Router();
 
-router.get("/", (req: Request, res: AppRes, next: NextFunction) => {
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
   try {
     res.json({ meeeage: " ok" });
   } catch (error) {
@@ -12,11 +11,14 @@ router.get("/", (req: Request, res: AppRes, next: NextFunction) => {
   }
 });
 
-router.get("/error", (req: Request, res: AppRes, next: NextFunction) => {
-  res.locals.func = "Routes > Health > Error";
-
+router.get("/error", (req: Request, res: Response, next: NextFunction) => {
   try {
-    throw appError(400, "Test message error!");
+    throw new AppError("Test error function", 400, "LOW", {
+      functionName: "Health Test Error ",
+      additionalData: {
+        userId: "Test Health User ID",
+      },
+    });
   } catch (error) {
     next(error);
   }

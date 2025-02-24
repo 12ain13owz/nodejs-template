@@ -3,7 +3,7 @@ import { developmentConfig } from "./development";
 import { productionConfig } from "./production";
 
 class Config {
-  private config: AppConfig;
+  private readonly config: AppConfig;
 
   constructor() {
     this.config =
