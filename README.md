@@ -158,6 +158,8 @@ nodejs-template/
 ├── src/                                  # Source code (TypeScript)
 │   ├── config/                           # Configuration files
 │   │   └── index.ts                      # Environment and app config
+│   ├── constants/                        # Constant definitions
+│   │   └── severity.const.ts             # Severity level constants
 │   ├── middlewares/                      # Express middleware
 │   │   └── error-response.middleware.ts  # Error handling middleware
 │   ├── routes/                           # API routes
