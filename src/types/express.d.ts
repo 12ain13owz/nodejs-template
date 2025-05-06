@@ -1,7 +1,8 @@
-import { Response } from "express";
+import { Response } from 'express'
 
 interface CustomResponseLocals {
-  user: string;
+  user: string
 }
 
-type AppRes = Response & { locals: CustomResponseLocals };
+// for custom res.locals
+type AppRes = Response & { locals: CustomResponseLocals }

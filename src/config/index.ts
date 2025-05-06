@@ -1,20 +1,30 @@
-import { AppConfig, ConfigKey } from "./type";
-import { developmentConfig } from "./development";
-import { productionConfig } from "./production";
+/* eslint-disable no-process-env */
+/* eslint-disable security/detect-object-injection */
 
-class Config {
-  private readonly config: AppConfig;
+import { z } from 'zod'
 
-  constructor() {
-    this.config =
-      process.env.NODE_ENV === "production"
-        ? productionConfig
-        : developmentConfig;
-  }
+import { AppConfig } from '@/types/config.type'
 
-  get<K extends ConfigKey>(key: K): AppConfig[K] {
-    return this.config[key];
-  }
+// Define environment variable schema with zod
+const envSchema = z.object({
+  PORT: z
+    .string()
+    .optional()
+    .transform((val) => Number(val))
+    .pipe(z.number().int().positive())
+    .default('3000'),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
+})
+
+// Parse and validate environment variables
+const env = envSchema.parse(process.env)
+
+// Define configuration based on environment
+const config: Readonly<AppConfig> = Object.freeze({
+  port: env.PORT,
+  node_env: env.NODE_ENV,
+})
+
+export function getConfig<K extends keyof AppConfig>(key: K): AppConfig[K] {
+  return config[key]
 }
-
-export const config = new Config();

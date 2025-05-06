@@ -1,12 +1,12 @@
-import { NextFunction, Request, Router } from "express";
-import health from "./health.routes";
-import { AppRes } from "../types/express";
+import { NextFunction, Request, Response, Router } from 'express'
 
-const router = Router();
+import health from './health.routes'
 
-router.get("/", (req: Request, res: AppRes, next: NextFunction) => {
-  res.json({ message: "Hello World!" });
-});
-router.use("/health", health);
+const router = Router()
 
-export default router;
+router.get('/', (_req: Request, res: Response, _next: NextFunction) => {
+  res.json({ message: 'Hello World!' })
+})
+router.use('/health', health)
+
+export default router
