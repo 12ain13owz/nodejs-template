@@ -160,6 +160,8 @@ nodejs-template/
 │   │   └── index.ts                      # Environment and app config
 │   ├── constants/                        # Constant definitions
 │   │   └── severity.const.ts             # Severity level constants
+│   ├── controllers/                      # Request handlers for routes
+│   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware
 │   │   └── error-response.middleware.ts  # Error handling middleware
 │   ├── routes/                           # API routes
