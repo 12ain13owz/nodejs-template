@@ -1,4 +1,3 @@
-/* eslint-disable security/detect-object-injection */
 import dayjs from 'dayjs'
 import winston from 'winston'
 
@@ -9,63 +8,122 @@ function applyColor(value: unknown, colorCode: string): string {
   return `\x1b[${colorCode}m${String(value)}\x1b[0m`
 }
 
-// ฟังก์ชันสำหรับ format ค่าเดี่ยวตามประเภทข้อมูล
-function formatValue(value: unknown): string {
-  if (typeof value === 'string') return applyColor(`"${value}"`, COLORS.string)
-  if (typeof value === 'number') return applyColor(value, COLORS.number)
-  if (typeof value === 'boolean') return applyColor(value, COLORS.boolean)
-  if (typeof value === 'function') return applyColor(value, COLORS.function)
-  if (value === undefined) return applyColor(value, COLORS.undefined)
-  if (value === null) return applyColor(value, COLORS.null)
+//ฟังก์ชันสำหรับจัดการการแสดงผล Array
+function formatArray(arr: unknown[], indent = 0): string {
+  if (arr.length === 0) return '[]'
 
-  return formatJSON(value as Record<string, unknown>) // ส่งต่อไปยัง formatJSON สำหรับ object
+  const indentStr = ' '.repeat(indent)
+  let result = '['
+
+  arr.forEach((item, index) => {
+    const formattedValue = formatAny(item, indent + 2)
+    result += `\n${indentStr}  ${formattedValue}`
+    if (index < arr.length - 1) result += ','
+  })
+
+  result += `\n${indentStr}]`
+  return result
 }
 
-// ฟังก์ชันสำหรับ format JSON object
-function formatJSON(obj: Record<string, unknown> | null, indent = 0): string {
-  if (typeof obj !== 'object' || obj === null) return formatValue(obj)
-  if (Object.keys(obj).length === 0) return '{}'
+// ฟังก์ชันสำหรับตรวจสอบว่า key เป็น property ของ object จริงหรือไม่ ช่วยป้องกัน prototype pollution
+function safeHasOwnProperty(
+  obj: Record<string, unknown>,
+  key: string
+): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, key)
+}
+
+// ฟังก์ชันสำหรับดึงค่า property จาก object อย่างปลอดภัย
+function safeGetProperty(obj: Record<string, unknown>, key: string): unknown {
+  if (safeHasOwnProperty(obj, key)) {
+    // ใช้ Object.getOwnPropertyDescriptor แทน direct access
+    const descriptor = Object.getOwnPropertyDescriptor(obj, key)
+    return descriptor ? descriptor.value : undefined
+  }
+  return undefined
+}
+
+// ฟังก์ชันสำหรับจัดการการแสดงผล Object
+function formatObject(obj: Record<string, unknown>, indent = 0): string {
+  // ตรวจสอบ object ว่าง
+  const ownKeys = Object.keys(obj)
+  if (ownKeys.length === 0) return '{}'
 
   const indentStr = ' '.repeat(indent)
   let result = '{'
-  const keys = Object.keys(obj)
 
-  keys.forEach((key, index) => {
-    const value = obj[key]
-    const formattedValue =
-      typeof value === 'object' && value !== null
-        ? formatJSON(value as Record<string, unknown>, indent + 2)
-        : formatValue(value)
+  ownKeys.forEach((key, index) => {
+    // ใช้ safeGetProperty แทนการเข้าถึงโดยตรง
+    const value = safeGetProperty(obj, key)
+    const formattedValue = formatAny(value, indent + 2)
 
     result += `\n${indentStr}  ${applyColor(
       `"${key}"`,
       COLORS.field
     )}: ${formattedValue}`
-    if (index < keys.length - 1) result += ','
+    if (index < ownKeys.length - 1) result += ','
   })
 
   result += `\n${indentStr}}`
   return result
 }
 
+// ฟังก์ชันสำหรับจัดการการแสดงผลค่าพื้นฐาน
+function formatPrimitive(value: unknown): string {
+  if (typeof value === 'string') return applyColor(`"${value}"`, COLORS.string)
+  if (typeof value === 'number') return applyColor(value, COLORS.number)
+  if (typeof value === 'boolean') return applyColor(value, COLORS.boolean)
+  if (typeof value === 'function')
+    return applyColor('function', COLORS.function)
+  if (value === undefined) return applyColor('undefined', COLORS.undefined)
+  if (value === null) return applyColor('null', COLORS.null)
+  if (value instanceof Date) return applyColor(value.toISOString(), COLORS.date)
+
+  return String(value as unknown)
+}
+
+// ฟังก์ชันหลักสำหรับจัดการการแสดงผลข้อมูลทุกประเภท
+function formatAny(value: unknown, indent = 0): string {
+  if (value instanceof Date) return formatPrimitive(value)
+  if (Array.isArray(value)) return formatArray(value, indent)
+  if (typeof value === 'object' && value !== null)
+    return formatObject(value as Record<string, unknown>, indent)
+
+  return formatPrimitive(value)
+}
+
+// ฟังก์ชันสำหรับจัดการกับ color code ของ level ต่างๆ
+function getLevelColor(level: string): string {
+  // ใช้ type guard เพื่อตรวจสอบว่า level มีอยู่ใน COLORS หรือไม่
+  const validLevelKeys = ['crit', 'error', 'warn', 'info'] as const
+  type LevelKey = (typeof validLevelKeys)[number]
+
+  if (validLevelKeys.includes(level as LevelKey)) {
+    return COLORS[level as LevelKey]
+  }
+
+  return COLORS.info // default fallback
+}
+
 // สร้าง custom format สำหรับ Winston
-const colorizedFormat = winston.format.printf(({ level, message }) => {
-  const time = `[${dayjs().format('HH:mm:ss.SSS')}]`
-  const levelUpper = level.toUpperCase()
-  const levelColor = COLORS[level as keyof typeof COLORS] || COLORS.info
+const colorizedFormat = winston.format.printf((info) => {
+  const timestamp = dayjs().format('HH:mm:ss.SSS')
+  const time = `[${timestamp}]`
+  const levelUpper = info.level.toUpperCase()
+  const levelColor = getLevelColor(info.level)
   const formattedLevel = applyColor(`${levelUpper}:`, levelColor)
 
   // จัดการ message ตามประเภท
+  const message = info.message
   if (Array.isArray(message)) {
-    const formattedArgs = message.map(formatValue).join(' ')
-    return `${time} ${formattedLevel} ${formattedArgs}`
+    const formattedMessage = message.map((item) => formatAny(item)).join(' ')
+    return `${time} ${formattedLevel} ${formattedMessage}`
   }
 
-  const formattedArg = formatValue(message)
-  return `${time} ${formattedLevel} ${formattedArg}`
+  const formattedMessage = formatAny(message)
+  return `${time} ${formattedLevel} ${formattedMessage}`
 })
 
-// สร้าง logger
 export const logger = winston.createLogger({
   level: 'info',
   levels: {
@@ -78,6 +136,17 @@ export const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 })
 
-// example
-// logger.info('Hello World')
-// logger.info(['สวัสดี World', 1, false, null, undefined, { foo: 'bar' }])
+// // example
+// const profile = {
+//   name: 'foo',
+//   date: new Date('2025-05-10T16:16:16.292Z'),
+//   nested: {
+//     value: 123,
+//     items: [1, 2, 3],
+//     createdAt: new Date('2025-05-11T10:10:10.100Z'),
+//   },
+// }
+
+// logger.info('Test Message')
+// logger.warn(profile)
+// logger.error([profile, 'Array test', 100, true])
