@@ -1,9 +1,9 @@
 import { Request } from 'express'
 
-import { severityToLogLevel } from '@/constants/severity.const'
+import { severityToLogLevel } from '@/constants/logger.const'
 import { ErrorContext, ErrorSeverity, LogLevel } from '@/types/error.type'
 
-import { log } from './logger.util'
+import { logger } from './logger.util'
 
 export class AppError extends Error {
   constructor(
@@ -117,26 +117,20 @@ export class ErrorLogger {
         : 'error'
 
     switch (level) {
-      case 'fatal':
-        log.fatal(errorLog)
-        break
-      case 'error':
-        log.error(errorLog)
+      case 'info':
+        logger.info(errorLog)
         break
       case 'warn':
-        log.warn(errorLog)
+        logger.warn(errorLog)
         break
-      case 'info':
-        log.info(errorLog)
+      case 'error':
+        logger.error(errorLog)
         break
-      case 'debug':
-        log.debug(errorLog)
-        break
-      case 'trace':
-        log.trace(errorLog)
+      case 'crit':
+        logger.crit(errorLog)
         break
       default:
-        log.error(errorLog)
+        logger.error(errorLog)
     }
 
     return errorLog

@@ -6,7 +6,7 @@ import morgan from 'morgan'
 import { getConfig } from './config'
 import { errorHandler } from './middlewares/error-response.middleware'
 import routes from './routes'
-import { log } from './utils/logger.util'
+import { logger } from './utils/logger.util'
 
 const app = express()
 const port = getConfig('port')
@@ -19,7 +19,7 @@ app.use(errorHandler)
 
 const main = () => {
   try {
-    log.info(`Server listening at http://localhost:${port}`)
+    logger.info(`Server listening at http://localhost:${port}`)
   } catch (error) {
     console.error(error)
     process.exit(1)

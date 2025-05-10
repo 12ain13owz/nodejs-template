@@ -1,12 +1,12 @@
 # Node.js Template with Express and TypeScript
 
-This is a boilerplate template for building a scalable REST API using **Node.js**, **Express**, and **TypeScript**. It includes tools and configurations for development, testing, and production, such as **Pino** and **Morgan** for logging, **ESLint** for code linting, **Zod** for schema validation, and **Docker** support. The template ensures consistency with standardized configurations like `.env` formatting and TypeScript setup.
+This is a boilerplate template for building a scalable REST API using **Node.js**, **Express**, and **TypeScript**. It includes tools and configurations for development, testing, and production, such as **Winston** and **Morgan** for logging, **ESLint** for code linting, **Zod** for schema validation, and **Docker** support. The template ensures consistency with standardized configurations like `.env` formatting and TypeScript setup.
 
 ## Features
 
 - **Express** for building RESTful APIs
 - **TypeScript** for type safety and scalability
-- **Pino** and **Morgan** for efficient logging
+- **Winston** and **Morgan** for efficient logging
 - **ESLint** with TypeScript and security plugins for code quality
 - **Zod** for runtime schema validation
 - **Dotenv** for environment variable management
@@ -40,13 +40,13 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 3. **Production dependencies**:
 
    ```bash
-   npm i config dayjs dotenv express lodash morgan pino zod
+   npm i config dayjs dotenv express lodash morgan winston zod
    ```
 
 4. **Development dependencies**:
 
    ```bash
-   npm i -D @eslint/js @types/config @types/express @types/lodash @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-plugin-import eslint-plugin-no-unsanitized eslint-plugin-security globals pino-pretty ts-node tsconfig-paths tsx typescript typescript-eslint
+   npm i -D @eslint/js @types/config @types/express @types/lodash @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-plugin-import eslint-plugin-no-unsanitized eslint-plugin-security globals ts-node tsconfig-paths tsx typescript typescript-eslint
    ```
 
 ## Environment Variables
@@ -62,10 +62,6 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
    ```env
    PORT="3000"
    NODE_ENV="development"
-   ACCESS_TOKEN_PRIVATE_KEY="<Private Key>"
-   ACCESS_TOKEN_PUBLIC_KEY="<Public Key>"
-   REFRESH_TOKEN_PRIVATE_KEY="<Refresh Private Key>"
-   REFRESH_TOKEN_PUBLIC_KEY="<Refresh Public Key>"
    ```
 
 3. **Example `.env.example`** (included in the repository):
@@ -73,13 +69,9 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
    ```env
    PORT="3000"
    NODE_ENV="development"
-   ACCESS_TOKEN_PRIVATE_KEY=""
-   ACCESS_TOKEN_PUBLIC_KEY=""
-   REFRESH_TOKEN_PRIVATE_KEY=""
-   REFRESH_TOKEN_PUBLIC_KEY=""
    ```
 
-4. **Generate RSA key pairs** for JWT authentication:
+4. (Optional) **Generate RSA key pairs** for JWT authentication:
    - Use a tool like [JSEncrypt](https://travistidwell.com/jsencrypt/demo/) to generate 2048-bit RSA key pairs.
    - Copy the private and public keys into the `.env` file as shown above.
 
@@ -159,7 +151,7 @@ nodejs-template/
 │   ├── config/                           # Configuration files
 │   │   └── index.ts                      # Environment and app config
 │   ├── constants/                        # Constant definitions
-│   │   └── severity.const.ts             # Severity level constants
+│   │   └── logger.const.ts               # Logger constants
 │   ├── controllers/                      # Request handlers for routes
 │   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware
@@ -195,7 +187,7 @@ nodejs-template/
 - `npm start`: Run the compiled JavaScript in production
 - `npm run lint`: Check code for linting issues
 - `npm run lint:fix`: Automatically fix linting issues
-- `npm test`: (Placeholder) Add your test script here
+- `npm test`: (Optional) Add your test script here
 
 ## Updating Dependencies
 
