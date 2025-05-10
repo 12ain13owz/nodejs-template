@@ -85,7 +85,6 @@ export class ErrorLogger {
   ) {
     const baseLog = {
       timestamp: new Date().toISOString(),
-      name: error.name,
       message: error.message,
     }
 
@@ -118,19 +117,19 @@ export class ErrorLogger {
 
     switch (level) {
       case 'info':
-        logger.info(errorLog)
+        logger.info([errorLog])
         break
       case 'warn':
-        logger.warn(errorLog)
+        logger.warn([errorLog])
         break
       case 'error':
-        logger.error(errorLog)
+        logger.error([errorLog])
         break
       case 'crit':
-        logger.crit(errorLog)
+        logger.crit([errorLog])
         break
       default:
-        logger.error(errorLog)
+        logger.error([errorLog])
     }
 
     return errorLog

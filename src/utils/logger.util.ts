@@ -24,6 +24,7 @@ function formatValue(value: unknown): string {
 // ฟังก์ชันสำหรับ format JSON object
 function formatJSON(obj: Record<string, unknown> | null, indent = 0): string {
   if (typeof obj !== 'object' || obj === null) return formatValue(obj)
+  if (Object.keys(obj).length === 0) return '{}'
 
   const indentStr = ' '.repeat(indent)
   let result = '{'
@@ -35,6 +36,7 @@ function formatJSON(obj: Record<string, unknown> | null, indent = 0): string {
       typeof value === 'object' && value !== null
         ? formatJSON(value as Record<string, unknown>, indent + 2)
         : formatValue(value)
+
     result += `\n${indentStr}  ${applyColor(
       `"${key}"`,
       COLORS.field
