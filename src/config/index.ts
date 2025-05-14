@@ -1,28 +1,46 @@
 /* eslint-disable no-process-env */
 /* eslint-disable security/detect-object-injection */
-
+import dotenv from 'dotenv'
 import { z } from 'zod'
 
+import { environment } from '@/constants/environment.const'
 import { AppConfig } from '@/types/config.type'
 
-// Define environment variable schema with zod
-const envSchema = z.object({
-  PORT: z
-    .string()
-    .optional()
-    .transform((val) => Number(val))
-    .pipe(z.number().int().positive())
-    .default('3000'),
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
-})
+// Load environment variables from the appropriate .env file
+const loadEnvFile = (): void => {
+  const nodeEnv =
+    process.env.NODE_ENV === environment.PRODUCTION
+      ? environment.ENV_PRODUCTION
+      : environment.ENV_DEVELOPMENT
 
-// Parse and validate environment variables
-const env = envSchema.parse(process.env)
+  dotenv.config({ path: nodeEnv })
+}
 
-// Define configuration based on environment
+// Define and validate the environment schema
+const validateEnv = () => {
+  const envSchema = z.object({
+    PORT: z
+      .string()
+      .optional()
+      .transform((val) => Number(val))
+      .pipe(z.number().int().positive())
+      .default('3000'),
+    NODE_ENV: z
+      .enum([environment.DEVELOPMENT, environment.PRODUCTION])
+      .default(environment.DEVELOPMENT),
+  })
+
+  return envSchema.parse(process.env)
+}
+
+// Initialize the configuration
+loadEnvFile()
+const env = validateEnv()
+
+// Create and freeze the config object
 const config: Readonly<AppConfig> = Object.freeze({
   port: env.PORT,
-  node_env: env.NODE_ENV,
+  node_env: env.NODE_ENV as AppConfig['node_env'],
 })
 
 export function getConfig<K extends keyof AppConfig>(key: K): AppConfig[K] {

@@ -32,52 +32,6 @@ export class AppError extends Error {
   }
 }
 
-export class ErrorFactory {
-  static notFound(
-    message: string, // Not Found
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 404, 'LOW', {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static badRequest(
-    message: string, // Bad Request
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 400, 'MEDIUM', {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static unauthorized(
-    message: string, // Unauthorized
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 401, 'HIGH', {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static serverError(
-    message: string, //Internal Server Error
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 500, 'CRITICAL', {
-      functionName,
-      additionalData,
-    })
-  }
-}
-
 export class ErrorLogger {
   private static formatErrorLog(
     error: AppError | Error,
@@ -133,5 +87,51 @@ export class ErrorLogger {
     }
 
     return errorLog
+  }
+}
+
+export class ErrorFactory {
+  static notFound(
+    message: string, // Not Found
+    functionName: string,
+    additionalData?: Record<string, unknown>
+  ) {
+    return new AppError(message, 404, 'LOW', {
+      functionName,
+      additionalData,
+    })
+  }
+
+  static badRequest(
+    message: string, // Bad Request
+    functionName: string,
+    additionalData?: Record<string, unknown>
+  ) {
+    return new AppError(message, 400, 'MEDIUM', {
+      functionName,
+      additionalData,
+    })
+  }
+
+  static unauthorized(
+    message: string, // Unauthorized
+    functionName: string,
+    additionalData?: Record<string, unknown>
+  ) {
+    return new AppError(message, 401, 'HIGH', {
+      functionName,
+      additionalData,
+    })
+  }
+
+  static serverError(
+    message: string, //Internal Server Error
+    functionName: string,
+    additionalData?: Record<string, unknown>
+  ) {
+    return new AppError(message, 500, 'CRITICAL', {
+      functionName,
+      additionalData,
+    })
   }
 }

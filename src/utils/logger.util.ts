@@ -8,7 +8,7 @@ function applyColor(value: unknown, colorCode: string): string {
   return `\x1b[${colorCode}m${String(value)}\x1b[0m`
 }
 
-//ฟังก์ชันสำหรับจัดการการแสดงผล Array
+// ฟังก์ชันสำหรับจัดการการแสดงผล Array
 function formatArray(arr: unknown[], indent = 0): string {
   if (arr.length === 0) return '[]'
 
@@ -136,7 +136,7 @@ export const logger = winston.createLogger({
   transports: [new winston.transports.Console()],
 })
 
-// // example
+// example
 // const profile = {
 //   name: 'foo',
 //   date: new Date('2025-05-10T16:16:16.292Z'),
