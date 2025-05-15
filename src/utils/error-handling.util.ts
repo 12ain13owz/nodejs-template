@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-import { severityToLogLevel } from '@/constants/logger.const'
+import { loggerConst } from '@/constants/logger.const'
 import { ErrorContext, ErrorSeverity, LogLevel } from '@/types/error.type'
 
 import { logger } from './logger.util'
@@ -39,7 +39,9 @@ export class ErrorLogger {
   ) {
     const baseLog = {
       timestamp: new Date().toISOString(),
+      name: error.name,
       message: error.message,
+      stack: error.stack,
     }
 
     if (error instanceof AppError)
@@ -66,20 +68,20 @@ export class ErrorLogger {
     const errorLog = this.formatErrorLog(error, additionalContext)
     const level: LogLevel =
       error instanceof AppError && error.severity
-        ? (severityToLogLevel[error.severity] as LogLevel) || 'error'
-        : 'error'
+        ? (loggerConst.logSeverity[error.severity] as LogLevel) || 'ERROR'
+        : 'ERROR'
 
     switch (level) {
-      case 'info':
+      case 'INFO':
         logger.info([errorLog])
         break
-      case 'warn':
+      case 'WARN':
         logger.warn([errorLog])
         break
-      case 'error':
+      case 'ERROR':
         logger.error([errorLog])
         break
-      case 'crit':
+      case 'CRIT':
         logger.crit([errorLog])
         break
       default:

@@ -3,7 +3,7 @@ const PRODUCTION = 'production'
 const ENV_DEVELOPMENT = '.env.development'
 const ENV_PRODUCTION = '.env.production'
 
-export const environment = {
+export const envConst = {
   DEVELOPMENT,
   PRODUCTION,
   ENV_DEVELOPMENT,

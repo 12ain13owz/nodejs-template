@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
 import { getConfig } from '@/config'
-import { appMessage } from '@/constants/app-message.const'
-import { environment } from '@/constants/environment.const'
+import { envConst } from '@/constants/env.const'
+import { messageConst } from '@/constants/message.const'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 import { logger } from '@/utils/logger.util'
 
@@ -18,7 +18,7 @@ export const errorHandler = async (
     const errorLog = ErrorLogger.log(error, {
       functionName:
         (error as AppError).context?.functionName ||
-        appMessage.internalErrors.UNKNOWN_FUNCTION,
+        messageConst.internalErrors.UNKNOWN_FUNCTION,
       requestContext: {
         method: req.method,
         url: req.url,
@@ -34,9 +34,7 @@ export const errorHandler = async (
       status: error instanceof AppError ? error.status : 500,
       message: error.message,
       error:
-        getConfig('node_env') === environment.DEVELOPMENT
-          ? errorLog
-          : undefined,
+        getConfig('node_env') === envConst.DEVELOPMENT ? errorLog : undefined,
     }
 
     res.status(response.status).json({ message: response.message })
@@ -44,6 +42,6 @@ export const errorHandler = async (
     logger.error(error)
     res
       .status(500)
-      .json({ message: appMessage.httpErrors.INTERNAL_SERVER_ERROR })
+      .json({ message: messageConst.httpErrors.INTERNAL_SERVER_ERROR })
   }
 }

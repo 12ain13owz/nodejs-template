@@ -17,7 +17,7 @@ const success = {
   OK: 'OK',
 }
 
-export const appMessage = {
+export const messageConst = {
   httpErrors,
   internalErrors,
   success,

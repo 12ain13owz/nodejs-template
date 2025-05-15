@@ -8,7 +8,14 @@ import tseslint from 'typescript-eslint'
 
 export default [
   // Ignore files and directories
-  { ignores: ['node_modules/**', 'dist/**/*', 'eslint.config.mjs'] },
+  {
+    ignores: [
+      'node_modules/**',
+      'dist/**/*',
+      'scripts/**',
+      'eslint.config.mjs',
+    ],
+  },
 
   // Target files to lint
   { files: ['src/**/*.{js,mjs,cjs,ts}'] },

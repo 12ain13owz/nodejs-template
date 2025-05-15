@@ -1,36 +1,56 @@
 /* eslint-disable no-process-env */
 /* eslint-disable security/detect-object-injection */
 import dotenv from 'dotenv'
-import { z } from 'zod'
+import fs from 'fs'
+import { z, ZodError } from 'zod'
 
-import { environment } from '@/constants/environment.const'
+import { envConst } from '@/constants/env.const'
 import { AppConfig } from '@/types/config.type'
+import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
 // Load environment variables from the appropriate .env file
 const loadEnvFile = (): void => {
   const nodeEnv =
-    process.env.NODE_ENV === environment.PRODUCTION
-      ? environment.ENV_PRODUCTION
-      : environment.ENV_DEVELOPMENT
+    process.env.NODE_ENV === envConst.PRODUCTION
+      ? envConst.ENV_PRODUCTION
+      : envConst.ENV_DEVELOPMENT
 
-  dotenv.config({ path: nodeEnv })
+  try {
+    if (!fs.existsSync(nodeEnv))
+      throw new AppError(`Could not find ${nodeEnv}`, 500, 'CRITICAL', {
+        functionName: 'loadEnvFile',
+      })
+
+    dotenv.config({ path: nodeEnv })
+  } catch (error) {
+    if (error instanceof AppError) ErrorLogger.log(error)
+    process.exit(1)
+  }
 }
 
 // Define and validate the environment schema
 const validateEnv = () => {
-  const envSchema = z.object({
-    PORT: z
-      .string()
-      .optional()
-      .transform((val) => Number(val))
-      .pipe(z.number().int().positive())
-      .default('3000'),
-    NODE_ENV: z
-      .enum([environment.DEVELOPMENT, environment.PRODUCTION])
-      .default(environment.DEVELOPMENT),
-  })
+  try {
+    const envSchema = z.object({
+      PORT: z
+        .string()
+        .optional()
+        .transform((val) => Number(val))
+        .pipe(z.number().int().positive()),
+      NODE_ENV: z.enum([envConst.DEVELOPMENT, envConst.PRODUCTION]),
+    })
 
-  return envSchema.parse(process.env)
+    return envSchema.parse(process.env)
+  } catch (error) {
+    const err = new AppError(
+      error instanceof ZodError ? error.message : 'Unknown error',
+      500,
+      'CRITICAL',
+      { functionName: 'validateEnv' }
+    )
+    ErrorLogger.log(err)
+    process.exit(1)
+  }
 }
 
 // Initialize the configuration

@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { appMessage } from '@/constants/app-message.const'
+import { messageConst } from '@/constants/message.const'
 import { AppError } from '@/utils/error-handling.util'
 
 function healthSuccess(_req: Request, res: Response, next: NextFunction) {
   try {
-    res.json({ message: appMessage.success.OK })
+    res.json({ message: messageConst.success.OK })
   } catch (error) {
     next(error)
   }

@@ -15,7 +15,7 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 
 ## Prerequisites
 
-- **Node.js**: v22.13.1 or higher
+- **Node.js**: v22.x or higher
 - **npm**: v10.x or higher
 - **Docker**: (optional) for containerized deployment
 - **Git**: For cloning the repository
@@ -46,40 +46,43 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 4. **Development dependencies**:
 
    ```bash
-   npm i -D @eslint/js @types/config @types/express @types/lodash @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint eslint-plugin-import eslint-plugin-no-unsanitized eslint-plugin-security globals ts-node tsconfig-paths tsx typescript typescript-eslint
+   npm i -D @eslint/js @types/config @types/express @types/lodash @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser chalk cross-env eslint eslint-plugin-import eslint-plugin-no-unsanitized eslint-plugin-security globals ts-node tsc-alias tsconfig-paths tsx typescript typescript-eslint
    ```
 
 ## Environment Variables
 
-1. **Create a `.env` file** in the project root:
+To configure the application, you need to create a `.env.development` file in the project root. Below are two methods to set it up:
+
+#### Option 1: Copy from `.env.example`
+
+1. **Create a `.env.development` file** in the project root:
 
    ```bash
-   cp .env.example .env
+   cp .env.example .env.development
    ```
 
-2. **Edit `.env`** with your configuration. All values **must** be enclosed in double quotes (`"`) for consistency:
+#### Option 2: Use the Setup Script
 
-   ```env
-   PORT="3000"
-   NODE_ENV="development"
+2. **Run the setup script** to automatically generate `.env.development` and `.env.production` from `.env.example`
+
+   ```bash
+   npm run setup-env
    ```
 
-3. **Example `.env.example`** (included in the repository):
+#### Configuring Environment Variables
 
-   ```env
-   PORT="3000"
-   NODE_ENV="development"
-   ```
+**Edit `.env.development`** with your configuration. All values **must** be enclosed in double quotes (`"`) for consistency:
 
-4. (Optional) **Generate RSA key pairs** for JWT authentication:
-   - Use a tool like [JSEncrypt](https://travistidwell.com/jsencrypt/demo/) to generate 2048-bit RSA key pairs.
-   - Copy the private and public keys into the `.env` file as shown above.
+```env
+PORT="3000"
+NODE_ENV="development"
+```
 
-**Note**: Ensure `.env` is listed in `.gitignore` to keep it out of version control.
+**Note**: Ensure `.env.development` is listed in `.gitignore` to keep it out of version control.
 
 ## Running the Project
 
-### Development
+#### Development
 
 Run the project in development mode with hot-reloading:
 
@@ -89,23 +92,7 @@ npm run dev
 
 This uses `tsx` to watch and run TypeScript files directly.
 
-### Production
-
-1. Build the project:
-
-   ```bash
-   npm run build
-   ```
-
-   This compiles TypeScript to JavaScript in the `dist/` folder.
-
-2. Start the server:
-
-   ```bash
-   npm start
-   ```
-
-### Docker
+#### Docker
 
 1. Build the Docker image:
 
@@ -116,10 +103,17 @@ This uses `tsx` to watch and run TypeScript files directly.
 2. Run the container:
 
    ```bash
-   docker run -p 3000:3000 --env-file .env nodejs-template
+   docker run -d -p 3000:3000 --name nodejs-dev nodejs-template
    ```
 
-The server will be available at `http://localhost:3000` (or the port specified in `.env`).
+The server will be available at `http://localhost:3000` (or the port specified in `.env.development`).
+
+#### Stopping the Container
+
+```bash
+docker stop nodejs-dev
+docker rm nodejs-dev
+```
 
 ## Linting and Code Quality
 
@@ -151,7 +145,9 @@ nodejs-template/
 │   ├── config/                           # Configuration files
 │   │   └── index.ts                      # Environment and app config
 │   ├── constants/                        # Constant definitions
+│   │   └── env.const.ts                  # Environment constants
 │   │   └── logger.const.ts               # Logger constants
+│   │   └── message.const.ts              # Message constants
 │   ├── controllers/                      # Request handlers for routes
 │   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware
@@ -167,9 +163,9 @@ nodejs-template/
 │   │   ├── error-handling.util.ts        # Error handling utilities
 │   │   └── logger.util.ts                # Logging utilities
 │   └── main.ts                           # Main entry point
-├── dist/                                 # Compiled JavaScript (after build)
-├── .env                                  # Environment variables (not committed)
-├── .env.example                          # Template for .env
+├── dist/                                 # Compiled JavaScript (after build) (not committed)
+├── .env.development                      # Environment development variables (not committed)
+├── .env.example                          # Template for .env.development or .env.production
 ├── .gitattributes                        # Git attributes configuration
 ├── .gitignore                            # Files to ignore in Git
 ├── Dockerfile                            # Docker configuration
@@ -182,9 +178,10 @@ nodejs-template/
 
 ## Scripts
 
+- `npm start`: Run the compiled JavaScript in production
 - `npm run dev`: Run in development mode with hot-reloading
 - `npm run build`: Compile TypeScript to JavaScript
-- `npm start`: Run the compiled JavaScript in production
+- `npm run setup-env`: "Setup script environment",
 - `npm run lint`: Check code for linting issues
 - `npm run lint:fix`: Automatically fix linting issues
 - `npm test`: (Optional) Add your test script here
