@@ -19,7 +19,7 @@ const main = () => {
   try {
     logger.info(`Server listening at http://localhost:${port}`)
   } catch (error) {
-    console.error(error)
+    logger.error(error)
     process.exit(1)
   }
 }

@@ -18,7 +18,7 @@ export const errorHandler = async (
     const errorLog = ErrorLogger.log(error, {
       functionName:
         (error as AppError).context?.functionName ||
-        appMessage.httpErrors.UNKNOWN_FUNCTION,
+        appMessage.internalErrors.UNKNOWN_FUNCTION,
       requestContext: {
         method: req.method,
         url: req.url,
