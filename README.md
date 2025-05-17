@@ -181,7 +181,7 @@ nodejs-template/
 - `npm start`: Run the compiled JavaScript in production
 - `npm run dev`: Run in development mode with hot-reloading
 - `npm run build`: Compile TypeScript to JavaScript
-- `npm run setup-env`: "Setup script environment",
+- `npm run setup-env`: Setup script environment,
 - `npm run lint`: Check code for linting issues
 - `npm run lint:fix`: Automatically fix linting issues
 - `npm test`: (Optional) Add your test script here
