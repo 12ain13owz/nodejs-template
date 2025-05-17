@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { messageConst } from '@/constants/message.const'
 import { AppError } from '@/utils/error-handling.util'
 
-function healthSuccess(_req: Request, res: Response, next: NextFunction) {
+const success = (_req: Request, res: Response, next: NextFunction): void => {
   try {
     res.json({ message: messageConst.success.OK })
   } catch (error) {
@@ -11,10 +11,10 @@ function healthSuccess(_req: Request, res: Response, next: NextFunction) {
   }
 }
 
-function healthError(_req: Request, _res: Response, next: NextFunction) {
+const error = (_req: Request, _res: Response, next: NextFunction): void => {
   try {
     throw new AppError('Test error function', 400, 'LOW', {
-      functionName: 'healthError',
+      functionName: 'healthController.error',
       additionalData: {
         userId: 1,
         name: 'John Doe',
@@ -31,6 +31,6 @@ function healthError(_req: Request, _res: Response, next: NextFunction) {
 }
 
 export const healthController = {
-  healthSuccess,
-  healthError,
+  success,
+  error,
 }

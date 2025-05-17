@@ -4,7 +4,7 @@ import { healthController } from '@/controllers/health.controller'
 
 const router = Router()
 
-router.get('/', healthController.healthSuccess)
-router.get('/error', healthController.healthError)
+router.get('/', healthController.success)
+router.get('/error', healthController.error)
 
 export default router

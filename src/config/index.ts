@@ -9,7 +9,7 @@ import { AppConfig } from '@/types/config.type'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
 // Load environment variables from the appropriate .env file
-const loadEnvFile = (): void => {
+function loadEnvFile(): void {
   const nodeEnv =
     process.env.NODE_ENV === envConst.PRODUCTION
       ? envConst.ENV_PRODUCTION
@@ -23,24 +23,32 @@ const loadEnvFile = (): void => {
 
     dotenv.config({ path: nodeEnv })
   } catch (error) {
-    if (error instanceof AppError) ErrorLogger.log(error)
+    if (error instanceof AppError) {
+      ErrorLogger.log(error)
+      process.exit(1)
+    }
+
+    console.error(error)
     process.exit(1)
   }
 }
 
-// Define and validate the environment schema
-const validateEnv = () => {
-  try {
-    const envSchema = z.object({
-      PORT: z
-        .string()
-        .optional()
-        .transform((val) => Number(val))
-        .pipe(z.number().int().positive()),
-      NODE_ENV: z.enum([envConst.DEVELOPMENT, envConst.PRODUCTION]),
-    })
+// Define environment schema
+function envSchema() {
+  return z.object({
+    PORT: z
+      .string()
+      .optional()
+      .transform((val) => Number(val))
+      .pipe(z.number().int().positive()),
+    NODE_ENV: z.enum([envConst.DEVELOPMENT, envConst.PRODUCTION]),
+  })
+}
 
-    return envSchema.parse(process.env)
+// Validate environment schema
+function validateEnv() {
+  try {
+    return envSchema().parse(process.env)
   } catch (error) {
     const err = new AppError(
       error instanceof ZodError ? error.message : 'Unknown error',
@@ -53,15 +61,15 @@ const validateEnv = () => {
   }
 }
 
-// Initialize the configuration
+// Initialize configuration
 loadEnvFile()
 const env = validateEnv()
 
-// Create and freeze the config object
+// Create and freeze config object
 const config: Readonly<AppConfig> = Object.freeze({
   port: env.PORT,
-  node_env: env.NODE_ENV as AppConfig['node_env'],
-})
+  node_env: env.NODE_ENV,
+} as const)
 
 export function getConfig<K extends keyof AppConfig>(key: K): AppConfig[K] {
   return config[key]

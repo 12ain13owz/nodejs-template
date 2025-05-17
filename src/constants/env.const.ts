@@ -1,7 +1,9 @@
-const DEVELOPMENT = 'development'
-const PRODUCTION = 'production'
-const ENV_DEVELOPMENT = '.env.development'
-const ENV_PRODUCTION = '.env.production'
+import { NodeEnv, EnvFile } from '@/types/config.type'
+
+const DEVELOPMENT: NodeEnv = 'development'
+const PRODUCTION: NodeEnv = 'production'
+const ENV_DEVELOPMENT: EnvFile = '.env.development'
+const ENV_PRODUCTION: EnvFile = '.env.production'
 
 export const envConst = {
   DEVELOPMENT,

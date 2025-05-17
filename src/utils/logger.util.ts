@@ -138,18 +138,3 @@ export const logger = winston.createLogger({
   format: colorizedFormat,
   transports: [new winston.transports.Console()],
 })
-
-// Example
-// const profile = {
-//   name: 'foo',
-//   date: new Date('2025-05-10T16:16:16.292Z'),
-//   nested: {
-//     value: 123,
-//     items: [1, 2, 3],
-//     createdAt: new Date('2025-05-11T10:10:10.100Z'),
-//   },
-// }
-
-// logger.info('Test Message')
-// logger.warn(profile)
-// logger.error([profile, 'Array test', 100, true])

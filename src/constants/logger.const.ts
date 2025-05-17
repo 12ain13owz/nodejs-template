@@ -3,7 +3,8 @@ const logSeverity = {
   MEDIUM: 'WARN',
   HIGH: 'ERROR',
   CRITICAL: 'CRIT',
-}
+} as const
+
 const colors = {
   STRING: '38;2;241;250;140', // #F1FA8C
   NUMBER: '38;2;127;255;212', // #7FFFD4
@@ -18,7 +19,7 @@ const colors = {
   WARN: '38;2;255;149;0', // #FF9500 (MEDIUM)
   ERROR: '38;2;255;59;48', // #FF3B30 (HIGH)
   CRIT: '38;2;175;82;222', // #AF52DE (CRITICAL)
-}
+} as const
 
 export const loggerConst = {
   logSeverity,
