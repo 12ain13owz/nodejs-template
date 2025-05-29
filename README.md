@@ -11,7 +11,9 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 - **Zod** for runtime schema validation
 - **Dotenv** for environment variable management
 - **Docker** support for containerized deployment
+- **@stoplight/elements** for interactive API documentation
 - Pre-configured `tsconfig.json` and ESLint rules
+- OpenAPI-based API documentation with YAML schemas
 
 ## Prerequisites
 
@@ -40,7 +42,7 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 3. **Production dependencies**:
 
    ```bash
-   npm i config dayjs dotenv express lodash morgan winston zod
+   npm i config dayjs dotenv express lodash morgan winston zod @stoplight/elements
    ```
 
 4. **Development dependencies**:
@@ -115,6 +117,20 @@ docker stop nodejs-dev
 docker rm nodejs-dev
 ```
 
+## API Documentation
+
+This project uses @stoplight/elements to serve interactive API documentation based on OpenAPI (Swagger) specifications. The documentation is available at the /docs endpoint.
+
+1. **Access API Documentation:** After starting the server, visit:
+
+```
+http://localhost:3000/docs
+```
+
+2. **API Specification:** The OpenAPI specification is defined in the docs/ directory, with the main file being docs/openapi.yaml. Supporting schemas and responses are located in docs/components/ and docs/paths/.
+
+3. **Updating Documentation:** Modify the YAML files in the docs/ directory to update the API documentation. The @stoplight/elements library renders these files into an interactive UI.
+
 ## Linting and Code Quality
 
 This project uses **ESLint** with TypeScript and security-focused plugins to ensure code quality and consistency.
@@ -141,18 +157,33 @@ The ESLint configuration (`eslint.config.mjs`) includes:
 
 ```
 nodejs-template/
+├── docs/                                 # API documentation files
+│   ├── components/                       # Reusable OpenAPI components
+│   │   ├── responses/                    # Response definitions
+│   │   │   ├── error.response.yaml       # Error response schema
+│   │   │   └── success.response.yaml     # Success response schema
+│   │   └── schemas/                      # Data schemas
+│   │       ├── error.schema.yaml         # Error schema
+│   │       └── health.schema.yaml        # Health check schema
+│   ├── paths/                            # API endpoint definitions
+│   │   └── health/                       # Health endpoint paths
+│   │       ├── error.yaml                # Error path
+│   │       └── health.yaml               # Health check path
+│   ├── index.html                        # HTML for rendering docs
+│   └── openapi.yaml                      # Main OpenAPI specification
 ├── src/                                  # Source code (TypeScript)
 │   ├── config/                           # Configuration files
 │   │   └── index.ts                      # Environment and app config
 │   ├── constants/                        # Constant definitions
-│   │   └── env.const.ts                  # Environment constants
-│   │   └── logger.const.ts               # Logger constants
+│   │   ├── env.const.ts                  # Environment constants
+│   │   ├── logger.const.ts               # Logger constants
 │   │   └── message.const.ts              # Message constants
 │   ├── controllers/                      # Request handlers for routes
 │   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware
 │   │   └── error-response.middleware.ts  # Error handling middleware
 │   ├── routes/                           # API routes
+│   │   ├── docs.routes.ts                # API documentation route
 │   │   ├── health.routes.ts              # Health check endpoint
 │   │   └── index.ts                      # Route aggregator
 │   ├── types/                            # TypeScript type definitions
