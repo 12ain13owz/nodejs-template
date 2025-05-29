@@ -33,15 +33,19 @@ export const errorHandler = async (
     const response = {
       status: error instanceof AppError ? error.status : 500,
       message: error.message,
-      error:
-        getConfig('node_env') === envConst.DEVELOPMENT ? errorLog : undefined,
+      timestamp: new Date().toISOString(),
+      ...(getConfig('node_env') === envConst.DEVELOPMENT && {
+        details: errorLog,
+      }),
     }
 
-    res.status(response.status).json({ message: response.message })
+    res.status(response.status).json(response)
   } catch (error) {
     logger.error(error)
-    res
-      .status(500)
-      .json({ message: messageConst.httpErrors.INTERNAL_SERVER_ERROR })
+    res.status(500).json({
+      status: 500,
+      message: messageConst.httpErrors.INTERNAL_SERVER_ERROR,
+      timestamp: new Date().toISOString(),
+    })
   }
 }

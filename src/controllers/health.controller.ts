@@ -5,7 +5,10 @@ import { AppError } from '@/utils/error-handling.util'
 
 const success = (_req: Request, res: Response, next: NextFunction): void => {
   try {
-    res.json({ message: messageConst.success.OK })
+    res.json({
+      message: messageConst.success.OK,
+      timestamp: new Date().toISOString(),
+    })
   } catch (error) {
     next(error)
   }
