@@ -4,16 +4,16 @@ import dotenv from 'dotenv'
 import fs from 'fs'
 import { z, ZodError } from 'zod'
 
-import { envConst } from '@/constants/env.const'
+import { ENV_FILE, NODE_ENV } from '@/constants/env.constant'
 import { AppConfig } from '@/types/config.type'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
 // Load environment variables from the appropriate .env file
 function loadEnvFile(): void {
   const nodeEnv =
-    process.env.NODE_ENV === envConst.PRODUCTION
-      ? envConst.ENV_PRODUCTION
-      : envConst.ENV_DEVELOPMENT
+    process.env.NODE_ENV === NODE_ENV.PRODUCTION
+      ? ENV_FILE.PRODUCTION
+      : ENV_FILE.DEVELOPMENT
 
   try {
     if (!fs.existsSync(nodeEnv))
@@ -41,7 +41,7 @@ function envSchema() {
       .optional()
       .transform((val) => Number(val))
       .pipe(z.number().int().positive()),
-    NODE_ENV: z.enum([envConst.DEVELOPMENT, envConst.PRODUCTION]),
+    NODE_ENV: z.enum([NODE_ENV.DEVELOPMENT, NODE_ENV.PRODUCTION]),
   })
 }
 

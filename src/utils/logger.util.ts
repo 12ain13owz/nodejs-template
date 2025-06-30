@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import winston from 'winston'
 
-import { loggerConst } from '@/constants/logger.const'
+import { COLORS } from '@/constants/logger.constant'
 
 // Function to create ANSI color string
 function applyColor(value: unknown, colorCode: string): string {
@@ -57,7 +57,7 @@ function formatObject(obj: Record<string, unknown>, indent = 0): string {
 
     result += `\n${indentStr}  ${applyColor(
       `"${key}"`,
-      loggerConst.colors.FIELD
+      COLORS.FIELD
     )}: ${formattedValue}`
     if (index < ownKeys.length - 1) result += ','
   })
@@ -68,19 +68,14 @@ function formatObject(obj: Record<string, unknown>, indent = 0): string {
 
 // Function to handle formatting of primitive values
 function formatPrimitive(value: unknown): string {
-  if (typeof value === 'string')
-    return applyColor(`"${value}"`, loggerConst.colors.STRING)
-  if (typeof value === 'number')
-    return applyColor(value, loggerConst.colors.NUMBER)
-  if (typeof value === 'boolean')
-    return applyColor(value, loggerConst.colors.BOOLEAN)
+  if (typeof value === 'string') return applyColor(`"${value}"`, COLORS.STRING)
+  if (typeof value === 'number') return applyColor(value, COLORS.NUMBER)
+  if (typeof value === 'boolean') return applyColor(value, COLORS.BOOLEAN)
   if (typeof value === 'function')
-    return applyColor('function', loggerConst.colors.FUNCTION)
-  if (value === undefined)
-    return applyColor('undefined', loggerConst.colors.UNDEFINED)
-  if (value === null) return applyColor('null', loggerConst.colors.NULL)
-  if (value instanceof Date)
-    return applyColor(value.toISOString(), loggerConst.colors.DATE)
+    return applyColor('function', COLORS.FUNCTION)
+  if (value === undefined) return applyColor('undefined', COLORS.UNDEFINED)
+  if (value === null) return applyColor('null', COLORS.NULL)
+  if (value instanceof Date) return applyColor(value.toISOString(), COLORS.DATE)
 
   return String(value as unknown)
 }
@@ -101,12 +96,10 @@ function getLevelColor(level: string): string {
   type LevelKey = (typeof validLevelKeys)[number]
 
   if (validLevelKeys.includes(level as LevelKey)) {
-    return loggerConst.colors[
-      level.toUpperCase() as keyof typeof loggerConst.colors
-    ]
+    return COLORS[level.toUpperCase() as keyof typeof COLORS]
   }
 
-  return loggerConst.colors.INFO // default fallback
+  return COLORS.INFO // default fallback
 }
 
 // Create custom format for Winston

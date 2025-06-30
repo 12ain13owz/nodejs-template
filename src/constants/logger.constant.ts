@@ -1,11 +1,11 @@
-const logSeverity = {
+export const LOG_SEVERITY = {
   LOW: 'INFO',
   MEDIUM: 'WARN',
   HIGH: 'ERROR',
   CRITICAL: 'CRIT',
 } as const
 
-const colors = {
+export const COLORS = {
   STRING: '38;2;241;250;140', // #F1FA8C
   NUMBER: '38;2;127;255;212', // #7FFFD4
   BOOLEAN: '38;2;250;140;208', // #FA8CD0
@@ -20,8 +20,3 @@ const colors = {
   ERROR: '38;2;255;59;48', // #FF3B30 (HIGH)
   CRIT: '38;2;175;82;222', // #AF52DE (CRITICAL)
 } as const
-
-export const loggerConst = {
-  logSeverity,
-  colors,
-}

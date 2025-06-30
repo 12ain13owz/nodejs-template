@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-import { loggerConst } from '@/constants/logger.const'
+import { LOG_SEVERITY } from '@/constants/logger.constant'
 import { ErrorContext, ErrorSeverity, LogLevel } from '@/types/error.type'
 
 import { logger } from './logger.util'
@@ -68,7 +68,7 @@ export class ErrorLogger {
     const errorLog = this.formatErrorLog(error, additionalContext)
     const level: LogLevel =
       error instanceof AppError && error.severity
-        ? (loggerConst.logSeverity[error.severity] as LogLevel) || 'ERROR'
+        ? (LOG_SEVERITY[error.severity] as LogLevel)
         : 'ERROR'
 
     switch (level) {

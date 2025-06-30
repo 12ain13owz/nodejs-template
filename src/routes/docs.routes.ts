@@ -1,4 +1,3 @@
-// src/routes/docs.routes.ts
 import { Router } from 'express'
 import path from 'path'
 

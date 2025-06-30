@@ -175,9 +175,9 @@ nodejs-template/
 │   ├── config/                           # Configuration files
 │   │   └── index.ts                      # Environment and app config
 │   ├── constants/                        # Constant definitions
-│   │   ├── env.const.ts                  # Environment constants
-│   │   ├── logger.const.ts               # Logger constants
-│   │   └── message.const.ts              # Message constants
+│   │   ├── env.constant.ts               # Environment constants
+│   │   ├── logger.constant.ts            # Logger constants
+│   │   └── message.constant.ts           # Message constants
 │   ├── controllers/                      # Request handlers for routes
 │   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware

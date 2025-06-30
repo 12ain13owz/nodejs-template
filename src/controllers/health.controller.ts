@@ -1,12 +1,16 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { messageConst } from '@/constants/message.const'
+import { MESSAGES } from '@/constants/message.constant'
 import { AppError } from '@/utils/error-handling.util'
 
-const success = (_req: Request, res: Response, next: NextFunction): void => {
+export const healthSuccessController = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   try {
     res.json({
-      message: messageConst.success.OK,
+      message: MESSAGES.SUCCESS.OK,
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
@@ -14,7 +18,11 @@ const success = (_req: Request, res: Response, next: NextFunction): void => {
   }
 }
 
-const error = (_req: Request, _res: Response, next: NextFunction): void => {
+export const healthErrorController = (
+  _req: Request,
+  _res: Response,
+  next: NextFunction
+): void => {
   try {
     throw new AppError('Test error function', 400, 'LOW', {
       functionName: 'healthController.error',
@@ -31,9 +39,4 @@ const error = (_req: Request, _res: Response, next: NextFunction): void => {
   } catch (error) {
     next(error)
   }
-}
-
-export const healthController = {
-  success,
-  error,
 }
