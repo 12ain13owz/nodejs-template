@@ -13,6 +13,3 @@ export type ErrorContext = {
   requestContext?: RequestContext
   additionalData?: Record<string, unknown>
 }
-
-export type ErrorSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
-export type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'CRIT'

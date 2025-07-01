@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import { getConfig } from '@/config'
-import { NODE_ENV } from '@/constants/env.constant'
+import { NodeEnv } from '@/constants/env.constant'
 import { HTTP_ERRORS, INTERNAL_ERRORS } from '@/constants/message.constant'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 import { logger } from '@/utils/logger.util'
@@ -34,7 +34,7 @@ export const errorHandler = async (
       status: error instanceof AppError ? error.status : 500,
       message: error.message,
       timestamp: new Date().toISOString(),
-      ...(getConfig('node_env') === NODE_ENV.DEVELOPMENT && {
+      ...(getConfig('node_env') === NodeEnv.DEVELOPMENT && {
         details: errorLog,
       }),
     }

@@ -1,9 +1,9 @@
-export const NODE_ENV = {
-  DEVELOPMENT: 'development',
-  PRODUCTION: 'production',
-} as const
+export enum NodeEnv {
+  DEVELOPMENT = 'development',
+  PRODUCTION = 'production',
+}
 
-export const ENV_FILE = {
-  DEVELOPMENT: '.env.development',
-  PRODUCTION: '.env.production',
-} as const
+export enum EnvFile {
+  DEVELOPMENT = '.env.development',
+  PRODUCTION = '.env.production',
+}

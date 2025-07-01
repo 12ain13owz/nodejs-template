@@ -1,4 +1,4 @@
-export type NodeEnv = 'development' | 'production'
+import { NodeEnv } from '@/constants/env.constant'
 
 export type AppConfig = {
   port: number

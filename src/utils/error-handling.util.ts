@@ -1,7 +1,11 @@
 import { Request } from 'express'
 
-import { LOG_SEVERITY } from '@/constants/logger.constant'
-import { ErrorContext, ErrorSeverity, LogLevel } from '@/types/error.type'
+import {
+  ErrorSeverity,
+  LogLevel,
+  LogSeverity,
+} from '@/constants/logger.constant'
+import { ErrorContext } from '@/types/error.type'
 
 import { logger } from './logger.util'
 
@@ -68,20 +72,20 @@ export class ErrorLogger {
     const errorLog = this.formatErrorLog(error, additionalContext)
     const level: LogLevel =
       error instanceof AppError && error.severity
-        ? (LOG_SEVERITY[error.severity] as LogLevel)
-        : 'ERROR'
+        ? LogLevel[LogSeverity[error.severity] as keyof typeof LogLevel]
+        : LogLevel.ERROR
 
     switch (level) {
-      case 'INFO':
+      case LogLevel.INFO:
         logger.info([errorLog])
         break
-      case 'WARN':
+      case LogLevel.WARN:
         logger.warn([errorLog])
         break
-      case 'ERROR':
+      case LogLevel.ERROR:
         logger.error([errorLog])
         break
-      case 'CRIT':
+      case LogLevel.CRIT:
         logger.crit([errorLog])
         break
       default:
@@ -98,7 +102,7 @@ export class ErrorFactory {
     functionName: string,
     additionalData?: Record<string, unknown>
   ) {
-    return new AppError(message, 404, 'LOW', {
+    return new AppError(message, 404, ErrorSeverity.LOW, {
       functionName,
       additionalData,
     })
@@ -109,7 +113,7 @@ export class ErrorFactory {
     functionName: string,
     additionalData?: Record<string, unknown>
   ) {
-    return new AppError(message, 400, 'MEDIUM', {
+    return new AppError(message, 400, ErrorSeverity.MEDIUM, {
       functionName,
       additionalData,
     })
@@ -120,7 +124,7 @@ export class ErrorFactory {
     functionName: string,
     additionalData?: Record<string, unknown>
   ) {
-    return new AppError(message, 401, 'HIGH', {
+    return new AppError(message, 401, ErrorSeverity.HIGH, {
       functionName,
       additionalData,
     })
@@ -131,7 +135,7 @@ export class ErrorFactory {
     functionName: string,
     additionalData?: Record<string, unknown>
   ) {
-    return new AppError(message, 500, 'CRITICAL', {
+    return new AppError(message, 500, ErrorSeverity.CRITICAL, {
       functionName,
       additionalData,
     })

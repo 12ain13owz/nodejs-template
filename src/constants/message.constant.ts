@@ -19,7 +19,6 @@ export const MESSAGES = {
     save: (name: string) => `Saved ${name} successfully`,
     upload: (name: string) => `Uploaded ${name} successfully`,
   },
-
   ERROR: {
     notFound: (item: string) => `${item} not found`,
     alreadyExists: (item: string) => `${item} already exists`,
@@ -30,17 +29,17 @@ export const MESSAGES = {
   },
 } as const
 
-export const HTTP_ERRORS = {
-  BAD_REQUEST: 'Bad request',
-  BAD_GATEWAY: 'Bad gateway',
-  UNAUTHORIZED: 'Unauthorized',
-  FORBIDDEN: 'Forbidden',
-  NOT_FOUND: 'Not found',
-  INTERNAL_SERVER_ERROR: 'Internal server error',
-  METHOD_NOT_ALLOWED: 'Method not allowed',
-  TOO_MANY_REQUESTS: 'Too many requests. Please try again later.',
-} as const
+export enum HTTP_ERRORS {
+  BAD_REQUEST = 'Bad request',
+  BAD_GATEWAY = 'Bad gateway',
+  UNAUTHORIZED = 'Unauthorized',
+  FORBIDDEN = 'Forbidden',
+  NOT_FOUND = 'Not found',
+  INTERNAL_SERVER_ERROR = 'Internal server error',
+  METHOD_NOT_ALLOWED = 'Method not allowed',
+  TOO_MANY_REQUESTS = 'Too many requests. Please try again later.',
+}
 
-export const INTERNAL_ERRORS = {
-  UNKNOWN_FUNCTION: 'Unknown function',
-} as const
+export enum INTERNAL_ERRORS {
+  UNKNOWN_FUNCTION = 'Unknown function',
+}

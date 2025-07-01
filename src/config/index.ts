@@ -4,22 +4,26 @@ import dotenv from 'dotenv'
 import fs from 'fs'
 import { z, ZodError } from 'zod'
 
-import { ENV_FILE, NODE_ENV } from '@/constants/env.constant'
+import { EnvFile, NodeEnv } from '@/constants/env.constant'
+import { ErrorSeverity } from '@/constants/logger.constant'
 import { AppConfig } from '@/types/config.type'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
 // Load environment variables from the appropriate .env file
 function loadEnvFile(): void {
   const nodeEnv =
-    process.env.NODE_ENV === NODE_ENV.PRODUCTION
-      ? ENV_FILE.PRODUCTION
-      : ENV_FILE.DEVELOPMENT
+    process.env.NODE_ENV === NodeEnv.PRODUCTION
+      ? EnvFile.PRODUCTION
+      : EnvFile.DEVELOPMENT
 
   try {
     if (!fs.existsSync(nodeEnv))
-      throw new AppError(`Could not find ${nodeEnv}`, 500, 'CRITICAL', {
-        functionName: 'loadEnvFile',
-      })
+      throw new AppError(
+        `Could not find ${nodeEnv}`,
+        500,
+        ErrorSeverity.CRITICAL,
+        { functionName: 'loadEnvFile' }
+      )
 
     dotenv.config({ path: nodeEnv })
   } catch (error) {
@@ -41,7 +45,7 @@ function envSchema() {
       .optional()
       .transform((val) => Number(val))
       .pipe(z.number().int().positive()),
-    NODE_ENV: z.enum([NODE_ENV.DEVELOPMENT, NODE_ENV.PRODUCTION]),
+    NODE_ENV: z.enum([NodeEnv.DEVELOPMENT, NodeEnv.PRODUCTION]),
   })
 }
 
@@ -53,7 +57,7 @@ function validateEnv() {
     const err = new AppError(
       error instanceof ZodError ? error.message : 'Unknown error',
       500,
-      'CRITICAL',
+      ErrorSeverity.CRITICAL,
       { functionName: 'validateEnv' }
     )
     ErrorLogger.log(err)
