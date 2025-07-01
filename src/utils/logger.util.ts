@@ -55,7 +55,7 @@ function formatObject(obj: Record<string, unknown>, indent = 0): string {
     const value = safeGetProperty(obj, key)
     const formattedValue = formatAny(value, indent + 2)
 
-    result += `\n${indentStr}  ${applyColor(
+    result += `\n${indentStr} ${applyColor(
       `"${key}"`,
       COLORS.FIELD
     )}: ${formattedValue}`

@@ -72,7 +72,7 @@ export class ErrorLogger {
     const errorLog = this.formatErrorLog(error, additionalContext)
     const level: LogLevel =
       error instanceof AppError && error.severity
-        ? LogLevel[LogSeverity[error.severity] as keyof typeof LogLevel]
+        ? LogLevel[LogSeverity[error.severity]]
         : LogLevel.ERROR
 
     switch (level) {
