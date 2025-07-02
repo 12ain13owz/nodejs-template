@@ -11,4 +11,4 @@ router.get('/', (_req: Request, res: Response, _next: NextFunction) => {
 router.use('/health', health)
 router.use('/docs', docs)
 
-export default router
+export const mainRoutes = router

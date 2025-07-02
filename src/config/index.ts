@@ -6,26 +6,27 @@ import { z, ZodError } from 'zod'
 
 import { EnvFile, NodeEnv } from '@/constants/env.constant'
 import { ErrorSeverity } from '@/constants/logger.constant'
+import { InternalError, MESSAGES } from '@/constants/message.constant'
 import { AppConfig } from '@/types/config.type'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
 // Load environment variables from the appropriate .env file
 function loadEnvFile(): void {
-  const nodeEnv =
+  const envFile =
     process.env.NODE_ENV === NodeEnv.PRODUCTION
       ? EnvFile.PRODUCTION
       : EnvFile.DEVELOPMENT
 
   try {
-    if (!fs.existsSync(nodeEnv))
+    if (!fs.existsSync(envFile))
       throw new AppError(
-        `Could not find ${nodeEnv}`,
+        MESSAGES.ERROR.notFoundEnvFile(envFile),
         500,
         ErrorSeverity.CRITICAL,
         { functionName: 'loadEnvFile' }
       )
 
-    dotenv.config({ path: nodeEnv })
+    dotenv.config({ path: envFile })
   } catch (error) {
     if (error instanceof AppError) {
       ErrorLogger.log(error)
@@ -55,7 +56,7 @@ function validateEnv() {
     return envSchema().parse(process.env)
   } catch (error) {
     const err = new AppError(
-      error instanceof ZodError ? error.message : 'Unknown error',
+      error instanceof ZodError ? error.message : InternalError.UNKNOWN_ERROR,
       500,
       ErrorSeverity.CRITICAL,
       { functionName: 'validateEnv' }

@@ -60,7 +60,7 @@ export class ErrorLogger {
     return {
       ...baseLog,
       status: 500,
-      severity: 'HIGH',
+      severity: LogSeverity.HIGH,
       ...additionalData,
     }
   }

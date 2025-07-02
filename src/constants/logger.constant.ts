@@ -5,13 +5,6 @@ export enum LogSeverity {
   CRITICAL = 'CRIT',
 }
 
-export enum ErrorSeverity {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  CRITICAL = 'CRITICAL',
-}
-
 export enum LogLevel {
   INFO = 'INFO',
   WARN = 'WARN',
@@ -19,7 +12,14 @@ export enum LogLevel {
   CRIT = 'CRIT',
 }
 
-export enum COLORS {
+export enum ErrorSeverity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL',
+}
+
+export enum Colors {
   STRING = '38;2;241;250;140', // #F1FA8C
   NUMBER = '38;2;127;255;212', // #7FFFD4
   BOOLEAN = '38;2;250;140;208', // #FA8CD0

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import winston from 'winston'
 
-import { COLORS } from '@/constants/logger.constant'
+import { Colors } from '@/constants/logger.constant'
 
 // Function to create ANSI color string
 function applyColor(value: unknown, colorCode: string): string {
@@ -57,7 +57,7 @@ function formatObject(obj: Record<string, unknown>, indent = 0): string {
 
     result += `\n${indentStr} ${applyColor(
       `"${key}"`,
-      COLORS.FIELD
+      Colors.FIELD
     )}: ${formattedValue}`
     if (index < ownKeys.length - 1) result += ','
   })
@@ -68,14 +68,14 @@ function formatObject(obj: Record<string, unknown>, indent = 0): string {
 
 // Function to handle formatting of primitive values
 function formatPrimitive(value: unknown): string {
-  if (typeof value === 'string') return applyColor(`"${value}"`, COLORS.STRING)
-  if (typeof value === 'number') return applyColor(value, COLORS.NUMBER)
-  if (typeof value === 'boolean') return applyColor(value, COLORS.BOOLEAN)
+  if (typeof value === 'string') return applyColor(`"${value}"`, Colors.STRING)
+  if (typeof value === 'number') return applyColor(value, Colors.NUMBER)
+  if (typeof value === 'boolean') return applyColor(value, Colors.BOOLEAN)
   if (typeof value === 'function')
-    return applyColor('function', COLORS.FUNCTION)
-  if (value === undefined) return applyColor('undefined', COLORS.UNDEFINED)
-  if (value === null) return applyColor('null', COLORS.NULL)
-  if (value instanceof Date) return applyColor(value.toISOString(), COLORS.DATE)
+    return applyColor('function', Colors.FUNCTION)
+  if (value === undefined) return applyColor('undefined', Colors.UNDEFINED)
+  if (value === null) return applyColor('null', Colors.NULL)
+  if (value instanceof Date) return applyColor(value.toISOString(), Colors.DATE)
 
   return String(value as unknown)
 }
@@ -96,10 +96,10 @@ function getLevelColor(level: string): string {
   type LevelKey = (typeof validLevelKeys)[number]
 
   if (validLevelKeys.includes(level as LevelKey)) {
-    return COLORS[level.toUpperCase() as keyof typeof COLORS]
+    return Colors[level.toUpperCase() as keyof typeof Colors]
   }
 
-  return COLORS.INFO // default fallback
+  return Colors.INFO // default fallback
 }
 
 // Create custom format for Winston

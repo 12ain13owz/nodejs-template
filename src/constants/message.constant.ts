@@ -1,7 +1,7 @@
 export const GENERIC = {
   serverListening: (port: number) =>
     `Server listening at http://localhost:${port}`,
-}
+} as const
 
 export const MESSAGES = {
   SUCCESS: {
@@ -21,6 +21,7 @@ export const MESSAGES = {
   },
   ERROR: {
     notFound: (item: string) => `${item} not found`,
+    notFoundEnvFile: (envFile: string) => `Could not find ${envFile}`,
     alreadyExists: (item: string) => `${item} already exists`,
     invalidField: (field: string) => `Invalid ${field}`,
     requiredField: (field: string) => `${field} is required`,
@@ -29,7 +30,7 @@ export const MESSAGES = {
   },
 } as const
 
-export enum HTTP_ERRORS {
+export enum HttpErrors {
   BAD_REQUEST = 'Bad request',
   BAD_GATEWAY = 'Bad gateway',
   UNAUTHORIZED = 'Unauthorized',
@@ -40,6 +41,7 @@ export enum HTTP_ERRORS {
   TOO_MANY_REQUESTS = 'Too many requests. Please try again later.',
 }
 
-export enum INTERNAL_ERRORS {
+export enum InternalError {
+  UNKNOWN_ERROR = 'Unknown error',
   UNKNOWN_FUNCTION = 'Unknown function',
 }

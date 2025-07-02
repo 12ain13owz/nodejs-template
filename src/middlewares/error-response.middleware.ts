@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import { getConfig } from '@/config'
 import { NodeEnv } from '@/constants/env.constant'
-import { HTTP_ERRORS, INTERNAL_ERRORS } from '@/constants/message.constant'
+import { HttpErrors, InternalError } from '@/constants/message.constant'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 import { logger } from '@/utils/logger.util'
 
@@ -18,7 +18,7 @@ export const errorHandler = async (
     const errorLog = ErrorLogger.log(error, {
       functionName:
         (error as AppError).context?.functionName ||
-        INTERNAL_ERRORS.UNKNOWN_FUNCTION,
+        InternalError.UNKNOWN_FUNCTION,
       requestContext: {
         method: req.method,
         url: req.url,
@@ -44,7 +44,7 @@ export const errorHandler = async (
     logger.error(error)
     res.status(500).json({
       status: 500,
-      message: HTTP_ERRORS.INTERNAL_SERVER_ERROR,
+      message: HttpErrors.INTERNAL_SERVER_ERROR,
       timestamp: new Date().toISOString(),
     })
   }

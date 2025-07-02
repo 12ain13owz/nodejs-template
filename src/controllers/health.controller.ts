@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
+import { ErrorSeverity } from '@/constants/logger.constant'
 import { MESSAGES } from '@/constants/message.constant'
 import { AppError } from '@/utils/error-handling.util'
 
@@ -24,7 +25,7 @@ export const healthErrorController = (
   next: NextFunction
 ): void => {
   try {
-    throw new AppError('Test error function', 400, 'LOW', {
+    throw new AppError('Test error function', 400, ErrorSeverity.LOW, {
       functionName: 'healthController.error',
       additionalData: {
         userId: 1,
