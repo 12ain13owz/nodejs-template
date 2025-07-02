@@ -1,8 +1,42 @@
+// --- HTTP Status Codes ---
+export enum HttpStatus {
+  OK = 200,
+  CREATED = 201,
+  ACCEPTED = 202,
+  NO_CONTENT = 204, // Often used for successful deletions with no response body
+
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  FORBIDDEN = 403,
+  NOT_FOUND = 404,
+  METHOD_NOT_ALLOWED = 405,
+  CONFLICT = 409, // Useful for 'already exists' scenarios
+  TOO_MANY_REQUESTS = 429,
+  UNPROCESSABLE_ENTITY = 422, // Common for validation errors
+
+  INTERNAL_SERVER_ERROR = 500,
+  BAD_GATEWAY = 502,
+  SERVICE_UNAVAILABLE = 503,
+  GATEWAY_TIMEOUT = 504,
+}
+
+// --- Internal Error Types ---
+// For errors that are internal to your application logic, not directly HTTP responses.
+export enum InternalError {
+  UNKNOWN_ERROR = 'Unknown error',
+  UNKNOWN_FUNCTION = 'Unknown function',
+}
+
+// --- Generic Application Messages ---
+// For general application messages that don't directly map to API responses.
 export const GENERIC = {
   serverListening: (port: number) =>
     `Server listening at http://localhost:${port}`,
 } as const
 
+// --- API Response Messages ---
+// These constants now contain ONLY the message strings.
+// They do NOT include HTTP status codes, keeping their purpose focused.
 export const MESSAGES = {
   SUCCESS: {
     OK: 'Operation successful',
@@ -20,6 +54,17 @@ export const MESSAGES = {
     upload: (name: string) => `Uploaded ${name} successfully`,
   },
   ERROR: {
+    // Basic error messages without dynamic parts
+    BAD_REQUEST: 'Bad request',
+    UNAUTHORIZED: 'Unauthorized',
+    FORBIDDEN: 'Forbidden',
+    NOT_FOUND: 'Not found',
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    METHOD_NOT_ALLOWED: 'Method not allowed',
+    TOO_MANY_REQUESTS: 'Too many requests. Please try again later.',
+    BAD_GATEWAY: 'Bad gateway',
+
+    // Error messages with dynamic parts
     notFound: (item: string) => `${item} not found`,
     notFoundEnvFile: (envFile: string) => `Could not find ${envFile}`,
     alreadyExists: (item: string) => `${item} already exists`,
@@ -29,19 +74,3 @@ export const MESSAGES = {
       `Failed to ${action} ${target}`,
   },
 } as const
-
-export enum HttpErrors {
-  BAD_REQUEST = 'Bad request',
-  BAD_GATEWAY = 'Bad gateway',
-  UNAUTHORIZED = 'Unauthorized',
-  FORBIDDEN = 'Forbidden',
-  NOT_FOUND = 'Not found',
-  INTERNAL_SERVER_ERROR = 'Internal server error',
-  METHOD_NOT_ALLOWED = 'Method not allowed',
-  TOO_MANY_REQUESTS = 'Too many requests. Please try again later.',
-}
-
-export enum InternalError {
-  UNKNOWN_ERROR = 'Unknown error',
-  UNKNOWN_FUNCTION = 'Unknown function',
-}

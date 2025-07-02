@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 
 import { ErrorSeverity } from '@/constants/logger.constant'
-import { MESSAGES } from '@/constants/message.constant'
+import { HttpStatus, MESSAGES } from '@/constants/message.constant'
 import { AppError } from '@/utils/error-handling.util'
 
 export const healthSuccessController = (
@@ -10,7 +10,7 @@ export const healthSuccessController = (
   next: NextFunction
 ): void => {
   try {
-    res.json({
+    res.status(HttpStatus.OK).json({
       message: MESSAGES.SUCCESS.OK,
       timestamp: new Date().toISOString(),
     })
@@ -25,18 +25,23 @@ export const healthErrorController = (
   next: NextFunction
 ): void => {
   try {
-    throw new AppError('Test error function', 400, ErrorSeverity.LOW, {
-      functionName: 'healthController.error',
-      additionalData: {
-        userId: 1,
-        name: 'John Doe',
-        active: false,
-        items: ['1', 2, true, null, undefined, new Date()],
-        description: null,
-        email: undefined,
-        createdAt: new Date(),
-      },
-    })
+    throw new AppError(
+      'Test error function',
+      HttpStatus.BAD_GATEWAY,
+      ErrorSeverity.LOW,
+      {
+        functionName: 'healthController.error',
+        additionalData: {
+          userId: 1,
+          name: 'John Doe',
+          active: false,
+          items: ['1', 2, true, null, undefined, new Date()],
+          description: null,
+          email: undefined,
+          createdAt: new Date(),
+        },
+      }
+    )
   } catch (error) {
     next(error)
   }

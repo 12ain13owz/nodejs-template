@@ -6,7 +6,11 @@ import { z, ZodError } from 'zod'
 
 import { EnvFile, NodeEnv } from '@/constants/env.constant'
 import { ErrorSeverity } from '@/constants/logger.constant'
-import { InternalError, MESSAGES } from '@/constants/message.constant'
+import {
+  HttpStatus,
+  InternalError,
+  MESSAGES,
+} from '@/constants/message.constant'
 import { AppConfig } from '@/types/config.type'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 
@@ -21,7 +25,7 @@ function loadEnvFile(): void {
     if (!fs.existsSync(envFile))
       throw new AppError(
         MESSAGES.ERROR.notFoundEnvFile(envFile),
-        500,
+        HttpStatus.INTERNAL_SERVER_ERROR,
         ErrorSeverity.CRITICAL,
         { functionName: 'loadEnvFile' }
       )
@@ -57,7 +61,7 @@ function validateEnv() {
   } catch (error) {
     const err = new AppError(
       error instanceof ZodError ? error.message : InternalError.UNKNOWN_ERROR,
-      500,
+      HttpStatus.INTERNAL_SERVER_ERROR,
       ErrorSeverity.CRITICAL,
       { functionName: 'validateEnv' }
     )
@@ -71,10 +75,10 @@ loadEnvFile()
 const env = validateEnv()
 
 // Create and freeze config object
-const config: Readonly<AppConfig> = Object.freeze({
+const config: Readonly<AppConfig> = {
   port: env.PORT,
   node_env: env.NODE_ENV,
-} as const)
+} as const
 
 export function getConfig<K extends keyof AppConfig>(key: K): AppConfig[K] {
   return config[key]
