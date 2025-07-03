@@ -1,13 +1,10 @@
 import { Router } from 'express'
 
-import {
-  healthErrorController,
-  healthSuccessController,
-} from '@/controllers/health.controller'
+import { healthController } from '@/controllers/health.controller'
 
 const router = Router()
 
-router.get('/', healthSuccessController)
-router.get('/error', healthErrorController)
+router.get('/', healthController.success)
+router.get('/error', healthController.error)
 
 export default router

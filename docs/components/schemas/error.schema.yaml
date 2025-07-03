@@ -23,7 +23,6 @@ properties:
     nullable: true
     properties:
       required:
-        - timestamp
         - name
         - message
         - stack
@@ -32,11 +31,6 @@ properties:
         - functionName
         - additionalData
         - requestContext
-      timestamp:
-        type: string
-        format: date-time
-        description: The time when the error was logged in ISO 8601 format
-        example: 2025-05-29T07:28:04.886Z
       name:
         type: string
         description: The name of the error class

@@ -15,7 +15,7 @@ export const errorHandler = async (
   req: Request,
   res: Response,
   _next: NextFunction
-) => {
+): Promise<void> => {
   try {
     if (error instanceof AppError) error.addRequestContext(req)
     const errorLog = ErrorLogger.log(error, {

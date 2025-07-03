@@ -42,7 +42,6 @@ export class ErrorLogger {
     additionalData?: Record<string, unknown>
   ) {
     const baseLog = {
-      timestamp: new Date().toISOString(),
       name: error.name,
       message: error.message,
       stack: error.stack,

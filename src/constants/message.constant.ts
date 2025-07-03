@@ -21,22 +21,18 @@ export enum HttpStatus {
 }
 
 // --- Internal Error Types ---
-// For errors that are internal to your application logic, not directly HTTP responses.
 export enum InternalError {
   UNKNOWN_ERROR = 'Unknown error',
   UNKNOWN_FUNCTION = 'Unknown function',
 }
 
 // --- Generic Application Messages ---
-// For general application messages that don't directly map to API responses.
 export const GENERIC = {
   serverListening: (port: number) =>
     `Server listening at http://localhost:${port}`,
 } as const
 
 // --- API Response Messages ---
-// These constants now contain ONLY the message strings.
-// They do NOT include HTTP status codes, keeping their purpose focused.
 export const MESSAGES = {
   SUCCESS: {
     OK: 'Operation successful',
@@ -54,7 +50,6 @@ export const MESSAGES = {
     upload: (name: string) => `Uploaded ${name} successfully`,
   },
   ERROR: {
-    // Basic error messages without dynamic parts
     BAD_REQUEST: 'Bad request',
     UNAUTHORIZED: 'Unauthorized',
     FORBIDDEN: 'Forbidden',
@@ -64,7 +59,6 @@ export const MESSAGES = {
     TOO_MANY_REQUESTS: 'Too many requests. Please try again later.',
     BAD_GATEWAY: 'Bad gateway',
 
-    // Error messages with dynamic parts
     notFound: (item: string) => `${item} not found`,
     notFoundEnvFile: (envFile: string) => `Could not find ${envFile}`,
     alreadyExists: (item: string) => `${item} already exists`,
