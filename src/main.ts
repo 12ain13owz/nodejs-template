@@ -2,14 +2,14 @@ import express from 'express'
 import morgan from 'morgan'
 import path from 'path'
 
-import { getConfig } from './config'
+import { config } from './config'
 import { GENERIC } from './constants/message.constant'
 import { errorHandler } from './middlewares/error-response.middleware'
 import { mainRoutes } from './routes'
 import { logger } from './utils/logger.util'
 
 const app = express()
-const port = getConfig('port')
+const port = config.port
 
 app.use(morgan('dev'))
 app.use(express.json())

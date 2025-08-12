@@ -18,23 +18,18 @@ export const healthController = {
 
   error: (_req: Request, _res: Response, next: NextFunction): void => {
     try {
-      throw new AppError(
-        'Test error function',
-        HttpStatus.BAD_REQUEST,
-        ErrorSeverity.LOW,
-        {
-          functionName: 'healthController.error',
-          additionalData: {
-            userId: 1,
-            name: 'John Doe',
-            active: false,
-            items: ['1', 2, true, null, undefined, new Date()],
-            description: null,
-            email: undefined,
-            createdAt: new Date(),
-          },
-        }
-      )
+      throw new AppError('Test error function', HttpStatus.BAD_REQUEST, ErrorSeverity.LOW, {
+        functionName: 'healthController.error',
+        additionalData: {
+          userId: 1,
+          name: 'John Doe',
+          active: false,
+          items: ['1', 2, true, null, undefined, new Date()],
+          description: null,
+          email: undefined,
+          createdAt: new Date(),
+        },
+      })
     } catch (error) {
       next(error)
     }

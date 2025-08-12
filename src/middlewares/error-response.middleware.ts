@@ -1,12 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 
-import { getConfig } from '@/config'
+import { config } from '@/config'
 import { NodeEnv } from '@/constants/env.constant'
-import {
-  HttpStatus,
-  InternalError,
-  MESSAGES,
-} from '@/constants/message.constant'
+import { HttpStatus, InternalError, MESSAGES } from '@/constants/message.constant'
 import { AppError, ErrorLogger } from '@/utils/error-handling.util'
 import { logger } from '@/utils/logger.util'
 
@@ -19,9 +15,7 @@ export const errorHandler = async (
   try {
     if (error instanceof AppError) error.addRequestContext(req)
     const errorLog = ErrorLogger.log(error, {
-      functionName:
-        (error as AppError).context?.functionName ||
-        InternalError.UNKNOWN_FUNCTION,
+      functionName: (error as AppError).context?.functionName || InternalError.UNKNOWN_FUNCTION,
       requestContext: {
         method: req.method,
         url: req.url,
@@ -34,13 +28,10 @@ export const errorHandler = async (
     })
 
     const response = {
-      status:
-        error instanceof AppError
-          ? error.status
-          : HttpStatus.INTERNAL_SERVER_ERROR,
+      status: error instanceof AppError ? error.status : HttpStatus.INTERNAL_SERVER_ERROR,
       message: error.message,
       timestamp: new Date().toISOString(),
-      ...(getConfig('node_env') === NodeEnv.DEVELOPMENT && {
+      ...(config.node_env === NodeEnv.DEVELOPMENT && {
         details: errorLog,
       }),
     }
