@@ -6,7 +6,7 @@ import { config } from './config'
 import { GENERIC } from './constants/message.constant'
 import { errorHandler } from './middlewares/error-response.middleware'
 import { mainRoutes } from './routes'
-import { logger } from './utils/logger.util'
+import { logger } from './utils/logger.utils'
 
 const app = express()
 const port = config.port

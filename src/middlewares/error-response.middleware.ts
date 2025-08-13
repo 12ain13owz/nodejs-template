@@ -3,8 +3,9 @@ import { NextFunction, Request, Response } from 'express'
 import { config } from '@/config'
 import { NodeEnv } from '@/constants/env.constant'
 import { HttpStatus, InternalError, MESSAGES } from '@/constants/message.constant'
-import { AppError, ErrorLogger } from '@/utils/error-handling.util'
-import { logger } from '@/utils/logger.util'
+import { AppError, ErrorLogger } from '@/utils/error-handling.utils'
+import { logger } from '@/utils/logger.utils'
+import { createResponse } from '@/utils/response.utils'
 
 export const errorHandler = async (
   error: AppError | Error,
@@ -27,22 +28,17 @@ export const errorHandler = async (
       },
     })
 
-    const response = {
-      status: error instanceof AppError ? error.status : HttpStatus.INTERNAL_SERVER_ERROR,
-      message: error.message,
-      timestamp: new Date().toISOString(),
-      ...(config.node_env === NodeEnv.DEVELOPMENT && {
-        details: errorLog,
-      }),
-    }
+    const status = errorLog.status ? errorLog.status : HttpStatus.INTERNAL_SERVER_ERROR
+    const message = errorLog.message ? errorLog.message : MESSAGES.ERROR.INTERNAL_SERVER_ERROR
+    const detail = config.node_env === NodeEnv.DEVELOPMENT ? errorLog : undefined
+    const response = createResponse(message, detail)
 
-    res.status(response.status).json(response)
+    res.status(status).json(response)
   } catch (error) {
     logger.error(error)
-    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-      status: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: MESSAGES.ERROR.INTERNAL_SERVER_ERROR,
-      timestamp: new Date().toISOString(),
-    })
+    const detail = config.node_env === NodeEnv.DEVELOPMENT ? error : undefined
+    const response = createResponse(MESSAGES.ERROR.INTERNAL_SERVER_ERROR, detail)
+
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(response)
   }
 }

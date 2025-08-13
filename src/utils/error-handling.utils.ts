@@ -1,13 +1,9 @@
 import { Request } from 'express'
 
-import {
-  ErrorSeverity,
-  LogLevel,
-  LogSeverity,
-} from '@/constants/logger.constant'
+import { ErrorSeverity, LogLevel, LogSeverity } from '@/constants/logger.constant'
 import { ErrorContext } from '@/types/error.type'
 
-import { logger } from './logger.util'
+import { logger } from './logger.utils'
 
 export class AppError extends Error {
   constructor(
@@ -37,10 +33,7 @@ export class AppError extends Error {
 }
 
 export class ErrorLogger {
-  private static formatErrorLog(
-    error: AppError | Error,
-    additionalData?: Record<string, unknown>
-  ) {
+  private static formatErrorLog(error: AppError | Error, additionalData?: Record<string, unknown>) {
     const baseLog = {
       name: error.name,
       message: error.message,
@@ -64,10 +57,7 @@ export class ErrorLogger {
     }
   }
 
-  static log(
-    error: AppError | Error,
-    additionalContext?: Partial<ErrorContext>
-  ) {
+  static log(error: AppError | Error, additionalContext?: Partial<ErrorContext>) {
     const errorLog = this.formatErrorLog(error, additionalContext)
     const level: LogLevel =
       error instanceof AppError && error.severity
