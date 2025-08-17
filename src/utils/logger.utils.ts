@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import winston from 'winston'
 
-import { Colors } from '@/constants/logger.constant'
+import { Colors } from '@/const/utils/logger.const'
 
 // Function to create ANSI color string
 function applyColor(value: unknown, colorCode: string): string {

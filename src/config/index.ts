@@ -1,4 +1,4 @@
-import type { AppConfig } from '@/types/config.type'
+import { AppConfig } from '@/types/generic.type'
 
 import { loadEnvFile } from './env-loader'
 import { validateEnv } from './validate-env'
@@ -6,7 +6,8 @@ import { validateEnv } from './validate-env'
 loadEnvFile()
 const env = validateEnv()
 
-export const config = Object.freeze({
+export const config: Readonly<AppConfig> = {
   port: env.PORT,
   node_env: env.NODE_ENV,
-}) satisfies Readonly<AppConfig>
+  baseUrl: env.BASE_URL,
+} as const
