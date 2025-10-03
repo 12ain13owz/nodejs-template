@@ -1,5 +1,3 @@
-/* eslint-disable no-process-env */
-
 import { ERRORS } from '@/const/systems/errors.const'
 import { HttpStatus } from '@/const/systems/http-status.const'
 import { ErrorSeverity } from '@/const/utils/logger.const'
@@ -14,9 +12,9 @@ export function validateEnv(): EnvSchema {
     const err = new AppError(
       error instanceof Error ? error.message : ERRORS.SYSTEM.INTERNAL_SERVER_ERROR,
       HttpStatus.INTERNAL_SERVER_ERROR,
-      ErrorSeverity.CRITICAL,
-      { functionName: 'validateEnv' }
-    )
+      ErrorSeverity.ERROR
+    ).addOperationName('validateEnv')
+
     ErrorLogger.log(err)
     process.exit(1)
   }

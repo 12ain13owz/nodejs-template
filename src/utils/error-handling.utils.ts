@@ -1,34 +1,46 @@
 import { Request } from 'express'
 
-import { ERRORS } from '@/const/systems/errors.const'
-import { ErrorSeverity, LogLevel, LogSeverity } from '@/const/utils/logger.const'
-import { ErrorContext } from '@/types/error.type'
+import { HttpStatus } from '@/const/systems/http-status.const'
+import { ErrorSeverity } from '@/const/utils/logger.const'
+import { EndpointContext, ErrorContext } from '@/types/error.type'
 
 import { logger } from './logger.utils'
 
 export class AppError extends Error {
   constructor(
     message: string,
-    public status: number,
-    public severity: ErrorSeverity,
-    public context: ErrorContext
+    public status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
+    public severity: ErrorSeverity = ErrorSeverity.ERROR,
+    public context: ErrorContext = {}
   ) {
     super(message)
     this.name = this.constructor.name
     Error.captureStackTrace(this, this.constructor)
   }
 
-  addRequestContext(req: Request) {
-    this.context.requestContext = {
+  addEndpointContext(req: Request): this {
+    const endpoint: EndpointContext = {
       method: req.method,
       url: req.originalUrl,
-      baseUrl: req.baseUrl,
-      path: req.path,
-      body: req.body as Record<string, unknown>,
-      params: req.params,
-      query: req.query,
     }
 
+    if (req.params && Object.keys(req.params).length > 0) endpoint.params = { ...req.params }
+    if (req.query && Object.keys(req.query).length > 0) endpoint.query = { ...req.query }
+
+    const body = req.body as Record<string, unknown>
+    if (req.body && Object.keys(body).length > 0) endpoint.body = { ...body }
+
+    this.context.endpoint = endpoint
+    return this
+  }
+
+  addOperationName(operationName: string): this {
+    this.context.operationName = operationName
+    return this
+  }
+
+  addAdditionalData(additionalData: Record<string, unknown>): this {
+    this.context.additionalData = additionalData
     return this
   }
 }
@@ -53,100 +65,26 @@ export class ErrorLogger {
     return {
       ...baseLog,
       status: 500,
-      severity: LogSeverity.HIGH,
+      severity: ErrorSeverity.ERROR,
       ...additionalData,
     }
   }
 
   static log(error: AppError | Error, additionalContext?: Partial<ErrorContext>) {
     const errorLog = this.formatErrorLog(error, additionalContext)
-    const level: LogLevel =
-      error instanceof AppError && error.severity
-        ? LogLevel[LogSeverity[error.severity]]
-        : LogLevel.ERROR
-
-    switch (level) {
-      case LogLevel.INFO:
-        logger.info([errorLog])
-        break
-      case LogLevel.WARN:
-        logger.warn([errorLog])
-        break
-      case LogLevel.ERROR:
-        logger.error([errorLog])
-        break
-      case LogLevel.CRIT:
-        logger.crit([errorLog])
-        break
-      default:
-        logger.error([errorLog])
+    const level = error instanceof AppError ? error.severity : ('error' as ErrorSeverity)
+    const logMethods = {
+      [ErrorSeverity.INFO]: logger.info,
+      [ErrorSeverity.WARN]: logger.warn,
+      [ErrorSeverity.HTTP]: logger.http,
+      [ErrorSeverity.VERBOSE]: logger.verbose,
+      [ErrorSeverity.DEBUG]: logger.debug,
+      [ErrorSeverity.ERROR]: logger.error,
     }
+
+    const logMethod = logMethods[level] || logger.error
+    logMethod([errorLog])
 
     return errorLog
   }
-}
-
-export class ErrorFactory {
-  static notFound(
-    message: string, // Not Found
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 404, ErrorSeverity.LOW, {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static badRequest(
-    message: string, // Bad Request
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 400, ErrorSeverity.MEDIUM, {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static unauthorized(
-    message: string, // Unauthorized
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 401, ErrorSeverity.HIGH, {
-      functionName,
-      additionalData,
-    })
-  }
-
-  static serverError(
-    message: string, //Internal Server Error
-    functionName: string,
-    additionalData?: Record<string, unknown>
-  ) {
-    return new AppError(message, 500, ErrorSeverity.CRITICAL, {
-      functionName,
-      additionalData,
-    })
-  }
-}
-
-export const logErrorWithContext = (
-  error: AppError | Error,
-  req: Request,
-  defaultFunctionName: string = ERRORS.SYSTEM.UNSPECIFIED_FUNCTION
-): void => {
-  ErrorLogger.log(error, {
-    functionName: error instanceof AppError ? error.context?.functionName : defaultFunctionName,
-    requestContext: {
-      method: req.method,
-      url: req.url,
-      baseUrl: req.baseUrl,
-      path: req.path,
-      body: req.body as Record<string, unknown>,
-      params: req.params,
-      query: req.query,
-    },
-  })
 }

@@ -20,14 +20,15 @@ export const successController = async (
 }
 
 export const errorController = async (
-  _req: Request,
+  req: Request,
   _res: Response,
   next: NextFunction
 ): Promise<void> => {
   try {
-    throw new AppError('Test error function', HttpStatus.BAD_REQUEST, ErrorSeverity.LOW, {
-      functionName: 'errorController.error',
-      additionalData: {
+    throw new AppError('Test error function', HttpStatus.BAD_REQUEST, ErrorSeverity.INFO)
+      .addOperationName('errorController')
+      .addEndpointContext(req)
+      .addAdditionalData({
         userId: 1,
         name: 'John Doe',
         active: false,
@@ -35,8 +36,7 @@ export const errorController = async (
         description: null,
         email: undefined,
         createdAt: new Date(),
-      },
-    })
+      })
   } catch (error) {
     next(error)
   }

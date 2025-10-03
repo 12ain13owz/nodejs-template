@@ -158,47 +158,21 @@ The ESLint configuration (`eslint.config.mjs`) includes:
 ```
 nodejs-template/
 ├── docs/                                 # API documentation files
-│   ├── components/                       # Reusable OpenAPI components
-│   │   ├── responses/                    # Response definitions
-│   │   │   ├── error.response.yaml       # Error response schema
-│   │   │   └── success.response.yaml     # Success response schema
-│   │   └── schemas/                      # Data schemas
-│   │       ├── error.schema.yaml         # Error schema
-│   │       └── health.schema.yaml        # Health check schema
-│   ├── paths/                            # API endpoint definitions
-│   │   └── health/                       # Health endpoint paths
-│   │       ├── error.yaml                # Error path
-│   │       └── health.yaml               # Health check path
-│   ├── index.html                        # HTML for rendering docs
-│   └── openapi.yaml                      # Main OpenAPI specification
 ├── src/                                  # Source code (TypeScript)
 │   ├── config/                           # Configuration files
-│   │   └── index.ts                      # Environment and app config
-│   ├── constants/                        # Constant definitions
-│   │   ├── env.constant.ts               # Environment constants
-│   │   ├── logger.constant.ts            # Logger constants
-│   │   └── message.constant.ts           # Message constants
+│   ├── const/                            # Constant definitions
 │   ├── controllers/                      # Request handlers for routes
-│   │   └── health.controller.ts          # Health check controller
 │   ├── middlewares/                      # Express middleware
-│   │   └── error-response.middleware.ts  # Error handling middleware
 │   ├── routes/                           # API routes
-│   │   ├── docs.routes.ts                # API documentation route
-│   │   ├── health.routes.ts              # Health check endpoint
-│   │   └── index.ts                      # Route aggregator
 │   ├── types/                            # TypeScript type definitions
-│   │   ├── config.type.ts                # Config types
-│   │   ├── error.type.ts                 # Error types
-│   │   └── express.d.ts                  # Custom Express types
 │   ├── utils/                            # Utility functions
-│   │   ├── error-handling.util.ts        # Error handling utilities
-│   │   └── logger.util.ts                # Logging utilities
 │   └── main.ts                           # Main entry point
 ├── dist/                                 # Compiled JavaScript (after build) (not committed)
 ├── .env.development                      # Environment development variables (not committed)
 ├── .env.example                          # Template for .env.development or .env.production
 ├── .gitattributes                        # Git attributes configuration
 ├── .gitignore                            # Files to ignore in Git
+├── .prettierrc                           # Prettier configuration
 ├── Dockerfile                            # Docker configuration
 ├── eslint.config.mjs                     # ESLint configuration
 ├── package.json                          # Dependencies and scripts
@@ -213,6 +187,7 @@ nodejs-template/
 - `npm run dev`: Run in development mode with hot-reloading
 - `npm run build`: Compile TypeScript to JavaScript
 - `npm run setup-env`: Setup script environment,
+- `npm run format`: Automatically fix format prettier,
 - `npm run lint`: Check code for linting issues
 - `npm run lint:fix`: Automatically fix linting issues
 - `npm test`: (Optional) Add your test script here
@@ -231,7 +206,7 @@ To keep dependencies up-to-date:
 
    ```bash
    npx npm-check-updates -u
-   npm install
+   npm install --force
    ```
 
 ## Testing
