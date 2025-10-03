@@ -3,13 +3,8 @@ import { existsSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { createLogger, format, transports } from 'winston'
 
-import {
-  AnsiColors,
-  LOG_LEVEL_COLORS,
-  LOG_LEVELS,
-  DisplayLevel,
-  LogLevel,
-} from '@/const/utils/logger.const'
+import { config } from '@/config'
+import { AnsiColors, LOG_LEVEL_COLORS, LOG_LEVELS, DisplayLevel } from '@/const/utils/logger.const'
 
 // # ==================== File Transport Utilities ====================
 
@@ -226,13 +221,6 @@ const fileLogFormat = format.printf((info) => {
 // # ==================== Logger Instance ====================
 
 /**
- * Logger configuration constants
- */
-const CONSOLE_LOG_LEVEL: LogLevel = 'debug'
-const FILE_LOG_LEVEL: LogLevel = 'info'
-const ERROR_FILE_LOG_LEVEL: LogLevel = 'error'
-
-/**
  * Configured Winston logger instance with custom formatting
  * Logs to both console (with colors) and files (plain text)
  *
@@ -251,21 +239,21 @@ export const logger = createLogger({
     // * Console transport with colors
     new transports.Console({
       format: customLogFormat,
-      level: CONSOLE_LOG_LEVEL,
+      level: config.logLevel.console,
     }),
 
     // * File transport for info logs
     new transports.File({
       filename: getLogFilePath(),
       format: fileLogFormat,
-      level: FILE_LOG_LEVEL,
+      level: config.logLevel.file,
     }),
 
     // ! File transport for error logs only
     new transports.File({
       filename: getLogFilePath('error'),
       format: fileLogFormat,
-      level: ERROR_FILE_LOG_LEVEL,
+      level: config.logLevel.errorFile,
     }),
   ],
 })
