@@ -48,7 +48,7 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 4. **Development dependencies**:
 
    ```bash
-   npm i -D @eslint/js @types/config @types/express @types/cors @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser chalk cross-env eslint eslint-plugin-import eslint-plugin-security globals prettier rimraf ts-node tsc-alias tsconfig-paths tsx typescript typescript-eslint
+   npm i -D @eslint/js @types/config @types/express @types/cors @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser chalk cross-env eslint eslint-plugin-import eslint-plugin-security globals prettier rimraf ts-node tsc-alias tsx typescript typescript-eslint
    ```
 
 ## Environment Variables

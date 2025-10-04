@@ -82,6 +82,7 @@ export class ErrorLogger {
       [ErrorSeverity.ERROR]: logger.error,
     }
 
+    // eslint-disable-next-line security/detect-object-injection
     const logMethod = logMethods[level] || logger.error
     logMethod([errorLog])
 
