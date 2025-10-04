@@ -42,13 +42,13 @@ This is a boilerplate template for building a scalable REST API using **Node.js*
 3. **Production dependencies**:
 
    ```bash
-   npm i config dayjs dotenv express lodash morgan winston zod @stoplight/elements
+   npm i @stoplight/elements config cors dayjs dotenv express express-rate-limit helmet morgan winston zod
    ```
 
 4. **Development dependencies**:
 
    ```bash
-   npm i -D @eslint/js @types/config @types/express @types/lodash @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser chalk cross-env eslint eslint-plugin-import eslint-plugin-no-unsanitized eslint-plugin-security globals ts-node tsc-alias tsconfig-paths tsx typescript typescript-eslint
+   npm i -D @eslint/js @types/config @types/express @types/cors @types/morgan @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser chalk cross-env eslint eslint-plugin-import eslint-plugin-security globals prettier rimraf ts-node tsc-alias tsconfig-paths tsx typescript typescript-eslint
    ```
 
 ## Environment Variables
@@ -78,6 +78,10 @@ To configure the application, you need to create a `.env.development` file in th
 ```env
 PORT="3000"
 NODE_ENV="development"
+BASE_URL="http://localhost:"
+LOG_LEVEL_CONSOLE="debug"
+LOG_LEVEL_FILE="info"
+LOG_LEVEL_ERROR_FILE="error"
 ```
 
 **Note**: Ensure `.env.development` is listed in `.gitignore` to keep it out of version control.
